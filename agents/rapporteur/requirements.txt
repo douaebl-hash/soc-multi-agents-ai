@@ -1,0 +1,5 @@
+# requirements.txt — Agent Rapporteur SOC
+langchain==0.3.0
+langchain-ollama==0.2.0
+langchain-community==0.3.0
+ollama>=0.3.0
