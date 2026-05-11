@@ -1,0 +1,29 @@
+=== RAPPORT SOC — 2026-05-11T10:10:28.008149 ===
+
+ # RAPPORT D'INCIDENT DE SÉCURITÉ
+
+## 1. Résumé Exécutif
+L'incident INC-2024-001, qui s'est produit le 15 janvier 2024 à 14h32, est une attaque de type Brute Force SSH provenant d'une source IP inconnue (192.168.1.105). Cette attaque a entraîné 500 tentatives de connexion en deux minutes sur le serveur SSH Production, ce qui représente une critique élevée et une urgence immédiate.
+
+## 2. Description Détaillée
+Le serveur SSH Production a été ciblé par plus de 500 tentatives de connexion en deux minutes. Ces tentatives semblent être la conséquence d'une attaque Brute Force SSH, où un intrus tente systématiquement des combinaisons de mots de passe et de noms d'utilisateurs pour accéder au serveur. L'IP source de ces tentatives (192.168.1.105) n'est pas connue dans notre base de données IP autorisées, ce qui indique qu'il s'agit d'un intrus extérieur.
+
+## 3. Indicateurs de Compromission (IoC)
+- Source IP suspecte : 192.168.1.105
+
+## 4. Impact Évalué
+Le serveur SSH Production a été affecté par cette attaque, ce qui peut entraîner une compromise de la sécurité des données stockées sur le serveur. En outre, l'impact potentiel sur la continuité de service est élevé en raison du nombre important de tentatives de connexion.
+
+## 5. Recommandations de Mitigation
+- Bloquer immédiatement l'IP source suspecte (192.168.1.105)
+- Isoler le serveur SSH Production pour limiter les risques d'extension de l'incident
+- Mettre à jour les mots de passe des utilisateurs du serveur SSH Production
+- Augmenter la surveillance des activités sur le serveur SSH Production
+
+## 6. Actions Suggérées pour l'Agent Exécuteur
+- Bloquer immédiatement l'IP source suspecte (192.168.1.105) sur les pare-feux de sécurité
+- Isoler le serveur SSH Production du réseau et mettre en place des mesures temporaires pour assurer la continuité de service
+- Notifier l'équipe de sécurité informatique pour qu'elle puisse prendre en charge la mise à jour des mots de passe des utilisateurs du serveur SSH Production
+
+## 7. Conclusion
+L'incident INC-2024-001 représente une critique élevée et une urgence immédiate. Il est important de prendre les mesures correctives immédiatement pour limiter les risques d'extension de l'incident et protéger la continuité de service. Nous recommandons également de surveiller activement le serveur SSH Production pour détecter toute activité anormale et répondre rapidement aux futurs incidents.
