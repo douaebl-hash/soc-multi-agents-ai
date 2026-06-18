@@ -1,0 +1,10 @@
+[
+  {
+    "event_id": "41e33bc0c4da9578",
+    "timestamp": "Jun 17 2026 15:30:00",
+    "source": "syslog",
+    "severity": 0.1,
+    "message": "brute force attack detected from 172.16.0.99",
+    "raw": "<1>Jun 17 2026 15:30:00 arch-secure firewall: brute force attack detected from 172.16.0.99"
+  }
+]

@@ -1,0 +1,33 @@
+# Dépendances additionnelles pour l'Agent Extracteur
+# (à fusionner avec votre requirements.txt existant)
+
+# --- Cœur de l'agent : aucune dépendance externe requise ---
+# (parsers.py, shared_memory.py et extractor.py en mode use_llm=False
+#  ne reposent que sur la bibliothèque standard Python)
+
+# --- Optionnel : uniquement si vous activez use_llm=True dans ExtractorAgent ---
+# langchain-core>=0.3.0
+# langchain-ollama>=0.2.0
+# Nécessite également un serveur Ollama local avec un Small LLM, ex :
+#   ollama pull llama3.2:1b
+
+# ============================================================================
+# DÉPENDANCES SYSTÈME REQUISES POUR LE MODE LIVE
+# ============================================================================
+
+# Network capture (tshark - CLI Wireshark)
+# Installation:
+#   Debian/Ubuntu:  sudo apt-get install tshark
+#   RHEL/CentOS:    sudo dnf install tshark
+#   macOS:          brew install wireshark
+#
+# Note: tshark nécessite les permissions pour capturer sur une interface réseau.
+# Solution sans sudo (après installation):
+#   sudo setcap cap_net_raw,cap_net_admin=eip $(which tshark)
+#   ou ajoutez l'utilisateur au groupe 'wireshark'
+
+# Syslog socket listening: aucune dépendance, socket Python standard
+
+# Prérequis pour le mode production:
+# - tshark (network capture live)
+# - iproute2 (pour détecter l'interface réseau: ip route show default)
