@@ -1,0 +1,18 @@
+[
+  {
+    "alert_type": "CORRELATION_ALERT",
+    "pattern": "BRUTE_FORCE_CONFIRMED",
+    "attacker_ip": "192.168.50.66",
+    "description": "IP 192.168.50.66 made 5 failed auth attempts in 300s",
+    "correlation_severity": 0.85,
+    "severity_label": "HIGH",
+    "involved_event_ids": [
+      "corrtest_0_1781905036",
+      "corrtest_1_1781905036",
+      "corrtest_2_1781905036",
+      "corrtest_3_1781905036",
+      "corrtest_4_1781905036"
+    ],
+    "detected_at": "2026-06-19T21:40:17.264166"
+  }
+]
