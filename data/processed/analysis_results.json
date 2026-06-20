@@ -1,0 +1,215 @@
+[
+  {
+    "event_id": "manual_1",
+    "timestamp": "2026-06-19T22:30:00",
+    "analyzed_at": "2026-06-19T21:31:39.584762",
+    "source": "syslog",
+    "event_type": "BRUTE_FORCE_ATTEMPT",
+    "final_severity": 0.9,
+    "severity_label": "HIGH",
+    "entities": {
+      "ips": [
+        "10.0.0.5"
+      ],
+      "ports": [
+        "22"
+      ],
+      "users": [
+        "root"
+      ],
+      "is_failed_auth": true
+    },
+    "llm_analysis": {
+      "attack_summary": "A brute force attempt was detected on IP 10.0.0.5 targeting SSH service with user 'root'.",
+      "attack_technique": "Brute Force (Credential Access, T1110)",
+      "affected_assets": [
+        "10.0.0.5"
+      ],
+      "recommended_action": "Block IP 10.0.0.5 temporarily and investigate the source of the brute force attempt.",
+      "confidence": 0.9,
+      "needs_escalation": true
+    },
+    "correlation_alert": null,
+    "original_message": "Failed password for root from 10.0.0.5 port 22 ssh2"
+  },
+  {
+    "event_id": "corrtest_0_1781905036",
+    "timestamp": "2026-06-19T21:37:16.861875",
+    "analyzed_at": "2026-06-19T21:38:17.430854",
+    "source": "syslog",
+    "event_type": "BRUTE_FORCE_ATTEMPT",
+    "final_severity": 0.9,
+    "severity_label": "HIGH",
+    "entities": {
+      "ips": [
+        "192.168.50.66"
+      ],
+      "ports": [
+        "22"
+      ],
+      "users": [
+        "root"
+      ],
+      "is_failed_auth": true
+    },
+    "llm_analysis": {
+      "attack_summary": "A brute force attempt was detected on IP 192.168.50.66 targeting SSH service with username 'root'.",
+      "attack_technique": "Brute Force (Credential Access, T1110)",
+      "affected_assets": [
+        "192.168.50.66"
+      ],
+      "recommended_action": "Block the IP temporarily and investigate the source of the brute force attempt.",
+      "confidence": 0.9,
+      "needs_escalation": true
+    },
+    "correlation_alert": null,
+    "original_message": "Failed password for root from 192.168.50.66 port 22 ssh2"
+  },
+  {
+    "event_id": "corrtest_1_1781905036",
+    "timestamp": "2026-06-19T21:37:16.861875",
+    "analyzed_at": "2026-06-19T21:38:58.014701",
+    "source": "syslog",
+    "event_type": "BRUTE_FORCE_ATTEMPT",
+    "final_severity": 0.9,
+    "severity_label": "HIGH",
+    "entities": {
+      "ips": [
+        "192.168.50.66"
+      ],
+      "ports": [
+        "22"
+      ],
+      "users": [
+        "root"
+      ],
+      "is_failed_auth": true
+    },
+    "llm_analysis": {
+      "attack_summary": "A brute force attempt was detected on IP 192.168.50.66 targeting SSH service with username 'root'.",
+      "attack_technique": "Brute Force (Credential Access, T1110)",
+      "affected_assets": [
+        "192.168.50.66"
+      ],
+      "recommended_action": "Block the IP temporarily and investigate the source of the brute force attempt.",
+      "confidence": 0.9,
+      "needs_escalation": true
+    },
+    "correlation_alert": null,
+    "original_message": "Failed password for root from 192.168.50.66 port 22 ssh2"
+  },
+  {
+    "event_id": "corrtest_2_1781905036",
+    "timestamp": "2026-06-19T21:37:16.861875",
+    "analyzed_at": "2026-06-19T21:39:37.092244",
+    "source": "syslog",
+    "event_type": "BRUTE_FORCE_ATTEMPT",
+    "final_severity": 0.9,
+    "severity_label": "HIGH",
+    "entities": {
+      "ips": [
+        "192.168.50.66"
+      ],
+      "ports": [
+        "22"
+      ],
+      "users": [
+        "root"
+      ],
+      "is_failed_auth": true
+    },
+    "llm_analysis": {
+      "attack_summary": "A brute force attempt was detected on IP 192.168.50.66 targeting SSH service with username 'root'.",
+      "attack_technique": "Brute Force (Credential Access, T1110)",
+      "affected_assets": [
+        "192.168.50.66"
+      ],
+      "recommended_action": "Block the IP temporarily and investigate the source of the brute force attempt.",
+      "confidence": 0.9,
+      "needs_escalation": true
+    },
+    "correlation_alert": null,
+    "original_message": "Failed password for root from 192.168.50.66 port 22 ssh2"
+  },
+  {
+    "event_id": "corrtest_3_1781905036",
+    "timestamp": "2026-06-19T21:37:16.861875",
+    "analyzed_at": "2026-06-19T21:40:17.260923",
+    "source": "syslog",
+    "event_type": "BRUTE_FORCE_ATTEMPT",
+    "final_severity": 0.9,
+    "severity_label": "HIGH",
+    "entities": {
+      "ips": [
+        "192.168.50.66"
+      ],
+      "ports": [
+        "22"
+      ],
+      "users": [
+        "root"
+      ],
+      "is_failed_auth": true
+    },
+    "llm_analysis": {
+      "attack_summary": "A brute force attempt was detected on IP 192.168.50.66 targeting SSH service with username 'root'.",
+      "attack_technique": "Brute Force (Credential Access, T1110)",
+      "affected_assets": [
+        "192.168.50.66"
+      ],
+      "recommended_action": "Block the IP temporarily and investigate the source of the brute force attempt.",
+      "confidence": 0.9,
+      "needs_escalation": true
+    },
+    "correlation_alert": null,
+    "original_message": "Failed password for root from 192.168.50.66 port 22 ssh2"
+  },
+  {
+    "event_id": "corrtest_4_1781905036",
+    "timestamp": "2026-06-19T21:37:16.861875",
+    "analyzed_at": "2026-06-19T21:40:59.351642",
+    "source": "syslog",
+    "event_type": "BRUTE_FORCE_ATTEMPT",
+    "final_severity": 0.9,
+    "severity_label": "HIGH",
+    "entities": {
+      "ips": [
+        "192.168.50.66"
+      ],
+      "ports": [
+        "22"
+      ],
+      "users": [
+        "root"
+      ],
+      "is_failed_auth": true
+    },
+    "llm_analysis": {
+      "attack_summary": "A brute force attempt was detected on IP 192.168.50.66 targeting SSH service with username 'root'.",
+      "attack_technique": "Brute Force (Credential Access, T1110)",
+      "affected_assets": [
+        "192.168.50.66"
+      ],
+      "recommended_action": "Block the IP temporarily and investigate the source of the brute force attempt.",
+      "confidence": 0.9,
+      "needs_escalation": true
+    },
+    "correlation_alert": {
+      "alert_type": "CORRELATION_ALERT",
+      "pattern": "BRUTE_FORCE_CONFIRMED",
+      "attacker_ip": "192.168.50.66",
+      "description": "IP 192.168.50.66 made 5 failed auth attempts in 300s",
+      "correlation_severity": 0.85,
+      "severity_label": "HIGH",
+      "involved_event_ids": [
+        "corrtest_0_1781905036",
+        "corrtest_1_1781905036",
+        "corrtest_2_1781905036",
+        "corrtest_3_1781905036",
+        "corrtest_4_1781905036"
+      ],
+      "detected_at": "2026-06-19T21:40:17.264166"
+    },
+    "original_message": "Failed password for root from 192.168.50.66 port 22 ssh2"
+  }
+]
