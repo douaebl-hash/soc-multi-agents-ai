@@ -1,0 +1,28 @@
+=== RAPPORT SOC — 2026-06-20T17:35:01.438544 ===
+
+ # 📊 TABLEAU DE BORD SOC — 20/06/2026
+
+## Résumé de la Période
+Période analysée : Dernières 24h. Une seule alerte a été détectée et confirmée comme incident réel, avec un taux de détection de 100%.
+
+## Statistiques Clés
+- Total alertes : 1
+- Incidents confirmés : 1
+- Faux positifs : 0
+- Taux de détection : 100.0%
+- Types d'attaques : {'T1207 - SQL Injection': 1}
+- Top IPs suspectes : ['185.220.101.5']
+- Actions exécutées : []
+
+## Menaces Principales
+1. T1207 - SQL Injection : Une tentative de manipulation des données a été détectée via une injection SQL.
+
+## Statut du Système
+- Santé globale : En bonne santé
+- Alertes actives : 1
+- Systèmes surveillés : Tous les systèmes sont en ligne et sous surveillance
+
+## Prochaines Actions Recommandées
+- Analyser plus profondément l'incident de SQL Injection détecté.
+- Mettre à jour les règles d'alerte pour la protection contre les attaques similaires.
+- Effectuer une vérification complète des données sensibles pour éviter toute manipulation malveillante.

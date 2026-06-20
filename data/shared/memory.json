@@ -1,0 +1,37 @@
+{
+  "last_incident_report": {
+    "incident_id": "1329b010af637f57",
+    "filepath": "D:\\projet_ai\\soc-multi-agents-ai\\data\\reports\\incident_report_1329b010af637f57_20260620_174123.txt",
+    "generated_at": "2026-06-20T17:41:23.165018"
+  },
+  "last_updated_by": "rapporteur_agent",
+  "last_updated_at": "2026-06-20T17:41:23.167228",
+  "last_summary_report": {
+    "filepath": "D:\\projet_ai\\soc-multi-agents-ai\\data\\reports\\summary_report_20260620_173124.txt",
+    "generated_at": "2026-06-20T17:31:24.056940"
+  },
+  "last_dashboard": {
+    "filepath": "D:\\projet_ai\\soc-multi-agents-ai\\data\\reports\\dashboard_20260620_173501.txt",
+    "stats": {
+      "period": "Dernières 24h",
+      "total_alerts": 1,
+      "confirmed_incidents": 1,
+      "false_positives": 0,
+      "detection_rate": 100.0,
+      "severity_counts": {
+        "CRITICAL": 0,
+        "HIGH": 0,
+        "MEDIUM": 1,
+        "LOW": 0
+      },
+      "attack_types": {
+        "T1207 - SQL Injection": 1
+      },
+      "top_suspicious_ips": [
+        "185.220.101.5"
+      ],
+      "executed_actions": []
+    },
+    "generated_at": "2026-06-20T17:35:01.439089"
+  }
+}

@@ -1,0 +1,5 @@
+{"timestamp": "2026-06-20T16:00:05Z", "rule_name": "Reconnaissance - Port Scanning", "description": "Host 192.168.1.150 triggered multiple connection drops on unique ports within 10 seconds", "severity": "medium"}
+{"timestamp": "2026-06-20T16:01:22Z", "rule_name": "Web Exploitation - SQL Injection", "description": "Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5", "severity": "high"}
+{"timestamp": "2026-06-20T16:03:40Z", "rule_name": "Brute Force Attack - SSH", "description": "More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100", "severity": "high"}
+{"timestamp": "2026-06-20T16:05:10Z", "rule_name": "Malware - Ransomware Activity", "description": "CRITICAL: Mass file rename and deletion activity detected on FileServer-01", "severity": "critical"}
+{"timestamp": "2026-06-20T16:07:15Z", "rule_name": "Privilege Escalation - Unauthorized", "description": "User 'guest' successfully executed sudo command without permissions on production database", "severity": "critical"}

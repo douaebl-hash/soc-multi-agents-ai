@@ -1,0 +1,32 @@
+=== RAPPORT SOC — 2026-06-20T17:41:23.164390 ===
+
+ # RAPPORT D'INCIDENT DE SÉCURITÉ
+
+## 1. Résumé Exécutif
+Un attaque Brute Force a été détectée sur l'interface SSH du système SIEM, avec plus de 15 tentatives infructueuses d'authentification pour le compte utilisateur root provenant de la source IP 192.168.1.100. L'incident présente une critique élevée et constitue une menace potentielle importante pour la sécurité des systèmes.
+
+## 2. Description Détaillée
+Le 20 juin 2026 à 16h03, un attaquant a tenté plus de 15 fois d'accéder au système SIEM en utilisant une méthode Brute Force. Les tentatives ont été détectées par le SIEM et ont généré des alertes.
+
+## 3. Indicateurs de Compromission (IoC)
+- Source IP suspecte : 192.168.1.100
+- Utilisateur cible : root
+- Type d'attaque : Brute Force (Credential Access, T1110)
+- Anomalies détectées : ['[SIEM ALERT] Brute Force Attack - SSH - More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100', "[LLM] More than 15 failed SSH authentication attempts for user 'root' from IP '192.168.1.100'"]
+
+## 4. Impact Évalué
+Le système SIEM est affecté par l'incident. Les données de sécurité stockées sur le système peuvent être potentiellement compromises si l'attaquant réussit à accéder à l'interface SSH. La continuité du service peut également être impactée en cas d'intrusion réussie.
+
+## 5. Recommandations de Mitigation
+- Bloquer immédiatement la source IP suspecte (192.168.1.100)
+- Changer les mots de passe des comptes utilisateurs susceptibles d'être compromis
+- Vérifier les logs de sécurité pour détecter toute autre activité anormale
+- Mettre en place des mesures supplémentaires pour renforcer la sécurité du système SIEM
+
+## 6. Actions Suggérées pour l'Agent Exécuteur
+- Bloquer immédiatement la source IP suspecte (192.168.1.100) sur tous les points de terminaison réseaux
+- Isoler la machine SIEM du réseau principal si nécessaire
+- Notifier l'équipe de sécurité informatique pour qu'elle puisse prendre en charge l'incident et mener à bien les mesures correctives
+
+## 7. Conclusion
+L'incident a été détecté et analysé par le Système Multi-Agents SOC. Les mesures de mitigation ont été recommandées pour réduire le risque d'intrusion et protéger les systèmes. La surveillance continue est nécessaire pour détecter toute activité anormale et prendre des mesures correctives si nécessaire.

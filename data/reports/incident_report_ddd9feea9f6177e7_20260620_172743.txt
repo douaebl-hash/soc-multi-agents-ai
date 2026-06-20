@@ -1,0 +1,29 @@
+=== RAPPORT SOC — 2026-06-20T17:27:43.063073 ===
+
+ # RAPPORT D'INCIDENT DE SÉCURITÉ
+
+## 1. Résumé Exécutif
+Un incident de type SQL Injection a été détecté provenant de l'adresse IP 185.220.101.5 vers notre système Web le 20 juin 2026 à 16:01:22 (UTC). L'impact potentiel est évalué au niveau MEDIUM, avec un score de risque de 7.6. Il est urgent d'effectuer des mesures correctives immédiatement pour prévenir une intrusion plus profonde.
+
+## 2. Description Détaillée
+L'incident a été détecté par notre système SIEM grâce à des alertes de Web Exploitation et SQL Injection. Le trafic suspect a été identifié dans une requête HTTP POST provenant de l'adresse IP 185.220.101.5. Aucune destination IP n'a pu être déterminée à ce stade.
+
+## 3. Indicateurs de Compromission (IoC)
+- Adresse IP suspecte : 185.220.101.5
+- Alertes SIEM : ['[SIEM ALERT] Web Exploitation - SQL Injection - Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5', '[LLM] SQL Injection attempt detected from IP 185.220.101.5']
+
+## 4. Impact Évalué
+Le système affecté est le SIEM. Il n'y a pas de données potentiellement compromises à ce stade, mais il est important de vérifier les logs et les journaux d'activité pour détecter toute intrusion possible. La continuité de service est considérée comme non menacée.
+
+## 5. Recommandations de Mitigation
+- Effectuer une analyse approfondie des logs et des journaux d'activité pour déterminer si l'intrus a pu accéder à des données sensibles.
+- Mettre en place des mesures correctives pour prévenir de futurs incidents de ce type, telles que la mise à jour du système Web et de son application Firewall.
+- Augmenter la surveillance sur l'adresse IP suspecte 185.220.101.5.
+
+## 6. Actions Suggérées pour l'Agent Exécuteur
+- Bloquer l'adresse IP suspecte 185.220.101.5 sur le pare-feu du système Web.
+- Isoler la machine hébergeant le SIEM si nécessaire.
+- Notifier l'équipe de sécurité informatique pour qu'elle puisse prendre en charge l'analyse approfondie des logs et des journaux d'activité.
+
+## 7. Conclusion
+Il est important de vérifier les données sensibles et de mettre en place des mesures correctives pour prévenir de futurs incidents de ce type. Nous recommandons également de surveiller de près l'adresse IP suspecte 185.220.101.5. Si des données sensibles sont compromises, il est important de notifier les autorités compétentes et de prendre des mesures appropriées pour protéger les informations personnelles.

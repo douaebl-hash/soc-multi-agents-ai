@@ -156,13 +156,11 @@ class TestComputeStats(unittest.TestCase):
 
 class TestReportGeneratorIntegration(unittest.TestCase):
 
-    @patch("report_generator.LLMChain")
-    def test_generate_incident_report_creates_file(self, mock_chain_class):
+    @patch("report_generator._run_chain")
+    def test_generate_incident_report_creates_file(self, mock_run_chain):
         """Vérifie que generate_incident_report crée bien un fichier."""
         # Mock : simule la réponse du LLM sans appeler Ollama
-        mock_chain = MagicMock()
-        mock_chain.run.return_value = "## Rapport de test\nContenu simulé du rapport."
-        mock_chain_class.return_value = mock_chain
+        mock_run_chain.return_value = "## Rapport de test\nContenu simulé du rapport."
 
         from report_generator import generate_incident_report
         result = generate_incident_report(SAMPLE_INCIDENT)
@@ -175,12 +173,10 @@ class TestReportGeneratorIntegration(unittest.TestCase):
         os.remove(result["filepath"])
         print("✅ test_generate_incident_report_creates_file : OK")
 
-    @patch("report_generator.LLMChain")
-    def test_generate_summary_report(self, mock_chain_class):
+    @patch("report_generator._run_chain")
+    def test_generate_summary_report(self, mock_run_chain):
         """Vérifie que generate_summary_report fonctionne avec plusieurs incidents."""
-        mock_chain = MagicMock()
-        mock_chain.run.return_value = "## Synthèse simulée\nVue d'ensemble des incidents."
-        mock_chain_class.return_value = mock_chain
+        mock_run_chain.return_value = "## Synthèse simulée\nVue d'ensemble des incidents."
 
         from report_generator import generate_summary_report
         result = generate_summary_report(SAMPLE_INCIDENTS_LIST)

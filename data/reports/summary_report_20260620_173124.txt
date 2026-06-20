@@ -1,0 +1,22 @@
+=== RAPPORT SOC — 2026-06-20T17:31:24.056421 ===
+
+ # RAPPORT DE SYNTHÈSE SOC — 20/06/2026 17:27
+
+## Vue d'ensemble
+Durant la période de surveillance, nous avons enregistré un total de 1 incidents. La répartition par criticité montre que seul un incident a été classé comme MEDIUM. Aucun incident CRITICAL ou HIGH n'a été détecté.
+
+## Incidents Critiques & Élevés
+Aucun incident CRITICAL ou HIGH n'a été enregistré durant cette période de surveillance.
+
+## Patterns Détectés
+En analysant les incidents, nous avons détecté une tentative de SQL Injection provenant de l'adresse IP 185.220.101.5 à la date et heure de 2026-06-20T16:01:22Z. Il s'agit du seul incident enregistré durant cette période, qui a été classé MEDIUM.
+
+## Recommandations Globales
+En raison du faible nombre d'incidents enregistrés et de la nature modérée de l'incident le plus critique, nous recommandons de continuer à surveiller attentivement les activités sur le réseau et de renforcer les mesures de sécurité en place.
+
+## Métriques Clés
+- Total incidents : 1
+- Criticité CRITICAL : 0
+- Criticité HIGH     : 0
+- Criticité MEDIUM   : 1
+- Criticité LOW      : 0

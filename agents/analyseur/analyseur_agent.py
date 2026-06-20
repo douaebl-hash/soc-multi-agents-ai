@@ -22,7 +22,7 @@ import os
 import signal
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timezone  # Correction : Ajout de timezone
 from typing import Optional
 
 # ── shared_memory.py now lives at the repo root ──
@@ -207,7 +207,7 @@ class AnalyseurAgent:
         return {
             "event_id": enriched.get("event_id"),
             "timestamp": enriched.get("timestamp"),
-            "analyzed_at": datetime.utcnow().isoformat(),
+            "analyzed_at": datetime.now(timezone.utc).isoformat(),  # Correction effectuée ici
             "source": enriched.get("source"),
             "event_type": enriched.get("event_type"),
             "final_severity": final_severity,

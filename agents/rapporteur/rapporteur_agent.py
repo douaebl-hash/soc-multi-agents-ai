@@ -16,7 +16,7 @@ EXTRACTEUR_DIR = os.path.join(PROJECT_ROOT, "agents", "extracteur")
 sys.path.insert(0, PROJECT_ROOT)
 sys.path.insert(0, EXTRACTEUR_DIR)
 
-from src.utils.shared_memory import SharedMemory
+from shared_memory import SharedMemory
 
 from report_generator import (
     generate_incident_report,
@@ -174,15 +174,14 @@ class RapporteurAgent:
         # Persistance dans l'historique dashboard
         record_incidents(incidents_list)
 
-        # Rapports individuels (HIGH + CRITICAL seulement)
+        # Rapports individuels (tous les incidents)
         individual_reports = []
         for incident in incidents_list:
-            if incident.get("severity", "").upper() in ("CRITICAL", "HIGH"):
-                r = self.process_incident(incident)
-                individual_reports.append({
-                    "incident_id": r["incident_id"],
-                    "filepath"   : r["filepath"],
-                })
+            r = self.process_incident(incident)
+            individual_reports.append({
+                "incident_id": r["incident_id"],
+                "filepath"   : r["filepath"],
+            })
 
         # Synthèse globale
         log.info("📋 Génération de la synthèse...")

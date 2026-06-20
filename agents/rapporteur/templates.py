@@ -57,17 +57,42 @@ Rapport généré automatiquement par le Système Multi-Agents SOC
 def get_summary_template(incidents_list: list) -> str:
     """
     Gabarit pour un rapport de synthèse sur plusieurs incidents.
+    Envoie au LLM uniquement les stats + les 10 incidents les plus critiques
+    pour ne pas dépasser la fenêtre de contexte de Mistral.
     """
+    total = len(incidents_list)
+
+    # Calcul des stats réelles
+    severity_counts = {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0}
+    for inc in incidents_list:
+        sev = inc.get("severity", "MEDIUM").upper()
+        if sev in severity_counts:
+            severity_counts[sev] += 1
+
+    # Priorité : CRITICAL > HIGH > MEDIUM > LOW, max 10 incidents
+    priority_order = ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+    top_incidents = sorted(
+        incidents_list,
+        key=lambda x: priority_order.index(x.get("severity", "LOW").upper())
+        if x.get("severity", "LOW").upper() in priority_order else 4
+    )[:10]
+
     incidents_text = "\n".join([
         f"- [{inc.get('severity', 'N/A')}] {inc.get('attack_type', 'Inconnu')} "
         f"depuis {inc.get('source_ip', 'N/A')} à {inc.get('timestamp', 'N/A')}"
-        for inc in incidents_list
+        for inc in top_incidents
     ])
 
     return f"""
-Tu es un analyste SOC senior. Génère un rapport de synthèse pour les incidents suivants :
+Tu es un analyste SOC senior. Génère un rapport de synthèse basé sur ces données :
 
-=== LISTE DES INCIDENTS ({len(incidents_list)} au total) ===
+=== MÉTRIQUES GLOBALES ({total} incidents au total) ===
+- CRITICAL : {severity_counts['CRITICAL']}
+- HIGH     : {severity_counts['HIGH']}
+- MEDIUM   : {severity_counts['MEDIUM']}
+- LOW      : {severity_counts['LOW']}
+
+=== TOP 10 INCIDENTS LES PLUS CRITIQUES ===
 {incidents_text}
 
 === FORMAT ATTENDU ===
@@ -75,10 +100,10 @@ Tu es un analyste SOC senior. Génère un rapport de synthèse pour les incident
 # RAPPORT DE SYNTHÈSE SOC — {datetime.now().strftime('%d/%m/%Y %H:%M')}
 
 ## Vue d'ensemble
-[Nombre total d'incidents, répartition par criticité, tendances observées]
+[Résumé basé sur les {total} incidents : répartition par criticité, tendances]
 
 ## Incidents Critiques & Élevés
-[Détail des incidents les plus graves, à traiter en priorité]
+[Détail des incidents CRITICAL et HIGH listés ci-dessus]
 
 ## Patterns Détectés
 [Corrélations entre incidents, campagnes d'attaque potentielles]
@@ -87,11 +112,11 @@ Tu es un analyste SOC senior. Génère un rapport de synthèse pour les incident
 [Actions stratégiques pour renforcer la posture de sécurité]
 
 ## Métriques Clés
-- Total incidents : {len(incidents_list)}
-- Criticité CRITICAL : [nombre]
-- Criticité HIGH : [nombre]
-- Criticité MEDIUM : [nombre]
-- Criticité LOW : [nombre]
+- Total incidents : {total}
+- Criticité CRITICAL : {severity_counts['CRITICAL']}
+- Criticité HIGH     : {severity_counts['HIGH']}
+- Criticité MEDIUM   : {severity_counts['MEDIUM']}
+- Criticité LOW      : {severity_counts['LOW']}
 
 ---
 Synthèse générée automatiquement par le Système Multi-Agents SOC

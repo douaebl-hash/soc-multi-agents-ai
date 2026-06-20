@@ -34,7 +34,7 @@ from analyser_adapter import analyseur_result_to_incident_batch
 
 # SharedMemory optionnelle (non bloquante si l'Extracteur n'est pas installé)
 try:
-    from src.utils.shared_memory import SharedMemory
+    from shared_memory import SharedMemory
     # Même chemin que l'Analyseur (upstream direct)
     PROCESSED_DIR    = os.path.join(PROJECT_ROOT, "data", "processed")
     _shared_memory   = SharedMemory(base_dir=PROCESSED_DIR)
@@ -318,12 +318,76 @@ with st.expander("🔎 Voir le détail d'un incident"):
 
 st.divider()
 
+# ─── Rapports individuels générés ────────────────────────────────────────────
+
+st.subheader("📄 Rapports d'incidents")
+
+REPORTS_DIR = os.path.join(PROJECT_ROOT, "data", "reports")
+
+def get_report_files() -> list:
+    """Récupère tous les rapports individuels triés du plus récent au plus ancien."""
+    if not os.path.exists(REPORTS_DIR):
+        return []
+    files = [
+        f for f in os.listdir(REPORTS_DIR)
+        if f.startswith("incident_report") and f.endswith(".txt")
+    ]
+    files.sort(reverse=True)
+    return files
+
+report_files = get_report_files()
+
+if not report_files:
+    st.caption("Aucun rapport individuel généré pour le moment.")
+else:
+    st.caption(f"{len(report_files)} rapport(s) disponible(s) dans `data/reports/`")
+
+    # Barre de recherche
+    search = st.text_input("🔍 Rechercher un rapport (ID incident, IP, type...)", "")
+
+    filtered_reports = [
+        f for f in report_files
+        if not search or search.lower() in f.lower()
+    ]
+
+    if not filtered_reports:
+        st.caption("Aucun rapport ne correspond à la recherche.")
+    else:
+        # Afficher les rapports dans des expanders
+        for filename in filtered_reports[:20]:  # max 20 affichés
+            filepath = os.path.join(REPORTS_DIR, filename)
+            # Extraire l'ID incident depuis le nom du fichier
+            parts = filename.replace("incident_report_", "").replace(".txt", "")
+            label_parts = parts.rsplit("_", 2)
+            incident_id = "_".join(label_parts[:-2]) if len(label_parts) > 2 else parts
+
+            # Lire les 2 premières lignes pour aperçu
+            preview = ""
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    lines = [l.strip() for l in f.readlines() if l.strip()]
+                    preview = lines[1] if len(lines) > 1 else ""
+            except Exception:
+                pass
+
+            with st.expander(f"📋 {incident_id}   —   {preview[:80]}"):
+                content = read_text_file(filepath)
+                if content:
+                    st.markdown(content)
+                else:
+                    st.caption("Fichier introuvable.")
+
+        if len(filtered_reports) > 20:
+            st.caption(f"... et {len(filtered_reports) - 20} autre(s) rapport(s). Utilisez la recherche pour filtrer.")
+
+st.divider()
+
 # ─── Rapports LLM ────────────────────────────────────────────────────────────
 
-st.subheader("🤖 Derniers rapports générés par le LLM")
+st.subheader(" Resume Rapports ")
 meta = get_shared_meta()
 
-tab1, tab2 = st.tabs(["Synthèse", "Dashboard texte (LLM)"])
+tab1, tab2 = st.tabs(["Synthèse", "Resume"])
 with tab1:
     info = meta.get("last_summary_report")
     if info:
