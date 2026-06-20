@@ -1,1 +1,16 @@
-[]
+[
+    {
+        "event_id": "e1b2c3d4",
+        "timestamp": "2026-06-19T23:51:36.273261+00:00",
+        "source": "network",
+        "severity": 0.5,
+        "message": "Network Traffic observed: TCP 192.168.1.50 -> 10.0.0.5:80"
+    },
+    {
+        "event_id": "f5g6h7i8",
+        "timestamp": "2026-06-19T23:51:36.273261+00:00",
+        "source": "network",
+        "severity": 0.8,
+        "message": "Network Traffic observed: TCP 172.16.0.99 -> 192.168.1.200:22 | Potential SSH brute force"
+    }
+]

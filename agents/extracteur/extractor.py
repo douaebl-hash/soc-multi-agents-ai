@@ -9,18 +9,33 @@ import os
 import subprocess
 import threading
 import time
+import sys
+import queue
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from src.utils.shared_memory import SharedMemory
-from src.utils.parsers import (
+# On récupère le dossier où se trouve extractor.py (agents/extracteur)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# On remonte de deux niveaux pour atteindre la racine globale (SOC-MULTI-AGENTS-AI)
+PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_DIR, "..", ".."))
+
+# On ajoute dynamiquement la racine et le dossier courant au path Python pour corriger les imports
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+if CURRENT_DIR not in sys.path:
+    sys.path.insert(1, CURRENT_DIR)
+
+# Maintenant, les imports fonctionneront peu importe d'où tu lances le script
+from shared_memory import SharedMemory
+from utils.parsers import (
     parse_tshark_json,
     generate_deterministic_id,
     normalize_severity,
 )
 
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
+# Configuration absolue des dossiers de données à la racine du projet
 RAW_DIR = os.path.join(PROJECT_ROOT, "data", "raw")
 PROCESSED_DIR = os.path.join(PROJECT_ROOT, "data", "processed")
 
@@ -85,6 +100,21 @@ class CaptureStatus:
 
 def detect_active_interface() -> Optional[str]:
     print("[🔍] Probing for active network interface...")
+    
+    # Compatibilité Windows (PowerShell Get-NetAdapter)
+    if sys.platform == "win32":
+        try:
+            cmd = ["powershell", "-Command", "Get-NetAdapter | Where-Object {$_.Status -eq 'Up'} | Select-Object -First 1 -ExpandProperty Name"]
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=5)
+            if result.returncode == 0 and result.stdout.strip():
+                iface = result.stdout.strip()
+                print(f"[✅ Windows] Found active interface: {iface}")
+                return iface
+        except Exception:
+            pass
+        return "Wi-Fi" # Valeur par défaut standard sous Windows si le probing échoue
+        
+    # Compatibilité Linux / Mac
     try:
         result = subprocess.run(
             ["ip", "route", "show", "default"],
@@ -97,20 +127,20 @@ def detect_active_interface() -> Optional[str]:
                     for i, part in enumerate(parts):
                         if part == "dev" and i + 1 < len(parts):
                             iface = parts[i + 1]
-                            print(f"[✅] Found active interface: {iface}")
+                            print(f"[✅ Linux] Found active interface: {iface}")
                             return iface
     except Exception as e:
         print(f"[❌] Interface detection failed: {e}")
 
-    for iface in ["eth0", "wlan0", "enp0s3", "ens33", "en0"]:
+    for iface in ["eth0", "wlan0", "enp0s3", "ens33", "en0", "lo"]:
         try:
-            subprocess.run(["ip", "link", "show", iface], check=True, timeout=1)
+            subprocess.run(["ip", "link", "show", iface], capture_output=True, timeout=1)
             print(f"[✅] Found interface: {iface}")
             return iface
         except Exception:
             continue
 
-    print("[⚠️] No active interface found)")
+    print("[⚠️] No active interface found")
     return None
 
 
@@ -124,7 +154,7 @@ class NetworkCaptureAgent:
         self.network_filter = network_filter
         self.running = False
         self.shutdown_event = threading.Event()
-        self._tshark_queue: "queue.Queue[Any]" = __import__("queue").Queue()
+        self._tshark_queue: queue.Queue = queue.Queue()
         self._tshark_thread: Optional[threading.Thread] = None
 
     def _tshark_reader(self) -> None:
@@ -196,46 +226,57 @@ class NetworkCaptureAgent:
                 if item_type != "PACKET":
                     continue
 
-                timestamp = packet.get("timestamp") or datetime.now().isoformat()
-                message = (
-                    f"{packet.get('protocol', 'unknown')} "
-                    f"{packet.get('src_ip', 'unknown')} -> "
-                    f"{packet.get('dst_ip', 'unknown')}"
-                )
+                timestamp = packet.get("timestamp") or datetime.now(timezone.utc).isoformat()
+                
+                proto = packet.get("protocol", "unknown").upper()
+                src_ip = packet.get("src_ip", "unknown")
+                dst_ip = packet.get("dst_ip", "unknown")
+                dst_port = packet.get("dst_port", "")
+                
+                port_suffix = f":{dst_port}" if dst_port else ""
+                message = f"Network Traffic observed: {proto} {src_ip} -> {dst_ip}{port_suffix}"
+                
+                severity_score = 0.5
+                if dst_port in [22, 3389, 445, 80, 443]:
+                    if dst_port == 22:
+                        message += " | Potential SSH connection attempt"
+                    elif dst_port == 445:
+                        message += " | SMB Traffic - Checking for potential lateral movement"
+                        severity_score = 0.75
+
                 event = Event(
                     timestamp=timestamp,
                     source="network",
-                    severity=0.5,
+                    severity=severity_score,
                     message=message,
                     raw=json.dumps(packet.get("raw_packet", packet)),
                 )
 
-                self.publish([event], "events_structured")
-                relevant = self.detect_relevant([event])
-                if relevant:
-                    self.publish(relevant, "pending_analysis")
+                self.publish(event, "events_structured")
+                
+                if self.detect_relevant(event):
+                    self.publish(event, "pending_analysis")
 
                 self.status.packets_captured += 1
-                print(f"[🟢 EVENT] {event.event_id[:8]} | {message[:60]}")
+                print(f"[🟢 EVENT EXTRACTED] {event.event_id[:8]} | {message[:75]}")
                 processed += 1
+            except queue.Empty:
+                break
             except Exception as e:
                 print(f"[❌ ERROR] Queue processing: {e}")
                 break
 
-    def detect_relevant(self, events: List[Event]) -> List[Event]:
+    def detect_relevant(self, event: Event) -> bool:
         keywords = [
             "attaque", "critical", "erreur", "echec", "brute", "force", "intrusion",
             "attack", "error", "failure", "failed", "password", "invalid user",
-            "ddos", "unauthorized", "denied",
+            "ddos", "unauthorized", "denied", "smb", "ssh", "movement",
         ]
-        return [
-            e for e in events
-            if any(kw in e.message.lower() for kw in keywords) or e.severity >= 0.7
-        ]
+        return any(kw in event.message.lower() for kw in keywords) or event.severity >= 0.7
 
-    def publish(self, events: List[Event], channel: str = "events_structured") -> None:
+    def publish(self, event: Event, channel: str = "events_structured") -> None:
         try:
-            self.memory.write(channel, [e.to_json_dict() for e in events])
+            self.memory.append(channel, event.to_json_dict())
         except Exception as e:
             print(f"[❌ ERROR] Publish {channel}: {e}")
 
@@ -243,7 +284,7 @@ class NetworkCaptureAgent:
         return self.status.to_dict()
 
     def run(self) -> Dict[str, Any]:
-        """Run a single-shot network session: start capture, process until stop requested."""
+        """Run a single-shot network session."""
         self.running = True
         self._tshark_thread = threading.Thread(target=self._tshark_reader, daemon=True)
         self._tshark_thread.start()
@@ -264,7 +305,10 @@ class NetworkCaptureAgent:
 
     def run_daemon(self, poll_interval: float = 0.1) -> None:
         """Continuous capture loop."""
+        # FIX ICI : self.running doit être activé AVANT de démarrer le thread lecteur
         self.running = True
+        self.shutdown_event.clear()
+        
         self._tshark_thread = threading.Thread(target=self._tshark_reader, daemon=True)
         self._tshark_thread.start()
 

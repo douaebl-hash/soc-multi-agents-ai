@@ -1,4 +1,4 @@
-# Gabarits pour la génération des rapports d'incidents SOC
+# pour la génération des rapports d'incidents SOC
 
 from datetime import datetime
 

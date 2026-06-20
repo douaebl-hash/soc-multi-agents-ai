@@ -24,7 +24,7 @@ def _get_chain(prompt_template: str) -> any:
     """Crée une chain LangChain moderne (prompt | llm)."""
     llm    = OllamaLLM(model=OLLAMA_MODEL, temperature=0.3)
     prompt = PromptTemplate(input_variables=["context"], template="{context}")
-    return prompt | llm          # nouvelle syntaxe LCEL — remplace LLMChain
+    return prompt | llm          
 
 
 def _run_chain(prompt_text: str) -> str:

@@ -24,7 +24,7 @@ def test_parser_locally():
     import sys, os
     sys.path.insert(0, os.getcwd())
     try:
-        from src.utils.parsers import parse_syslog_line, normalize_severity
+        from agents.extracteur.utils.parsers import parse_syslog_line, normalize_severity
         print("=" * 60)
         print("LOCAL PARSER TEST")
         print("=" * 60)
