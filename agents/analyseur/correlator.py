@@ -10,7 +10,9 @@ from typing import Optional
 
 CORRELATION_WINDOW_SECONDS = 300   # 5-minute sliding window
 BRUTE_FORCE_THRESHOLD      = 5     # N failed auths from same IP -> alert
-SCAN_THRESHOLD             = 3     # N network hits from same IP -> port scan confirmed
+SCAN_THRESHOLD             = 25    # N distinct destinations from same IP -> port scan confirmed
+                                     # (normal browsing easily touches 5-10 CDN/ad hosts per
+                                     # page load, so this must be well above that)
 
 
 class CorrelationEngine:
@@ -57,11 +59,15 @@ class CorrelationEngine:
         alerts = []
         for ip in ips:
             self._purge_old_events(ip, reference_time=ts)
+            # destination = the OTHER ip in this event's entity list (best-effort)
+            other_ips = [x for x in ips if x != ip]
+            dest = other_ips[0] if other_ips else None
             self._window[ip].append({
                 "timestamp": ts,
                 "source": source,
                 "event_type": event_type,
                 "event_id": event_id,
+                "dest": dest,
             })
             alert = self._check_patterns(ip)
             if alert:
@@ -92,10 +98,16 @@ class CorrelationEngine:
                 1.0, [e["event_id"] for e in events],
             )
 
-        if len(net_events) >= SCAN_THRESHOLD:
+        # A real port scan means hitting MANY DISTINCT destinations/ports,
+        # not just generating a lot of packets to a single server (which is
+        # normal sustained traffic, e.g. an active app session).
+        distinct_destinations = set(
+            e.get("dest") for e in net_events if e.get("dest")
+        )
+        if len(distinct_destinations) >= SCAN_THRESHOLD:
             return self._build_alert(
                 ip, "PORT_SCAN_CONFIRMED",
-                f"IP {ip} hit {len(net_events)} network events - port scan confirmed",
+                f"IP {ip} hit {len(distinct_destinations)} distinct destinations - port scan confirmed",
                 0.75, [e["event_id"] for e in net_events],
             )
 

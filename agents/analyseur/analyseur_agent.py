@@ -25,14 +25,11 @@ import time
 from datetime import datetime
 from typing import Optional
 
-# ── Make sure both the repo root AND agents/extracteur are importable.
-#    The real shared_memory.py lives at: agents/extracteur/src/utils/shared_memory.py
+# ── shared_memory.py now lives at the repo root ──
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-EXTRACTEUR_DIR = os.path.join(PROJECT_ROOT, "agents", "extracteur")
 sys.path.insert(0, PROJECT_ROOT)
-sys.path.insert(0, EXTRACTEUR_DIR)
 
-from src.utils.shared_memory import SharedMemory
+from shared_memory import SharedMemory
 
 from agents.analyseur.rules_engine import analyze_event
 from agents.analyseur.correlator import CorrelationEngine

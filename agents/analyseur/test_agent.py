@@ -10,13 +10,11 @@ import os
 import sys
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-EXTRACTEUR_DIR = os.path.join(PROJECT_ROOT, "agents", "extracteur")
 sys.path.insert(0, PROJECT_ROOT)
-sys.path.insert(0, EXTRACTEUR_DIR)
 
 from agents.analyseur.rules_engine import analyze_event, extract_entities
 from agents.analyseur.correlator import CorrelationEngine
-from src.utils.shared_memory import SharedMemory
+from shared_memory import SharedMemory
 
 # ─── Sample events (same shape as real Extracteur output) ─────────────────────
 FAILED_SSH = {

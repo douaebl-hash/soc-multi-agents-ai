@@ -36,9 +36,39 @@ class SharedMemory:
             return json.loads(content) if content else []
 
     def write(self, channel: str, items: List[Any]) -> None:
+        """
+        Atomic write: writes to a temp file then renames it onto the real
+        file. os.replace() is atomic on both Windows and Linux, so a
+        concurrent reader never sees a partial/truncated file mid-write.
+
+        On Windows, os.replace() can transiently fail with WinError 5
+        (Access is denied) if another process briefly holds a read handle
+        on the destination file (common with antivirus/indexing, or another
+        agent process reading the file at that exact moment). This is
+        retried with a short backoff rather than failing immediately.
+        """
+        import time as _time
+
         path = self._path(channel)
-        with self._lock, open(path, "w", encoding="utf-8") as f:
+        tmp_path = path + ".tmp"
+        with self._lock, open(tmp_path, "w", encoding="utf-8") as f:
             json.dump(items, f, ensure_ascii=False, indent=2, default=str)
+
+        last_error = None
+        for attempt in range(5):
+            try:
+                os.replace(tmp_path, path)
+                return
+            except PermissionError as e:
+                last_error = e
+                _time.sleep(0.05 * (attempt + 1))  # 50ms, 100ms, 150ms, 200ms, 250ms
+
+        # All retries exhausted - clean up the temp file and surface the error
+        try:
+            os.remove(tmp_path)
+        except OSError:
+            pass
+        raise last_error
 
     def append(self, channel: str, item: Any) -> None:
         items = self.read(channel)
