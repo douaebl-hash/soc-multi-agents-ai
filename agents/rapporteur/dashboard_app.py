@@ -384,21 +384,14 @@ st.divider()
 
 # ─── Rapports LLM ────────────────────────────────────────────────────────────
 
-st.subheader(" Resume Rapports ")
+st.subheader(" Synthèse Globale ")
 meta = get_shared_meta()
 
-tab1, tab2 = st.tabs(["Synthèse", "Resume"])
-with tab1:
-    info = meta.get("last_summary_report")
-    if info:
-        st.caption(f"Généré le {info.get('generated_at', 'N/A')}")
-        st.text(read_text_file(info.get("filepath", "")) or "Fichier introuvable.")
-    else:
-        st.caption("Aucune synthèse générée pour le moment.")
-with tab2:
-    info = meta.get("last_dashboard")
-    if info:
-        st.caption(f"Généré le {info.get('generated_at', 'N/A')}")
-        st.text(read_text_file(info.get("filepath", "")) or "Fichier introuvable.")
-    else:
-        st.caption("Aucun dashboard texte généré pour le moment.")
+info = meta.get("last_summary_report")
+if info:
+    st.caption(f"Généré le {info.get('generated_at', 'N/A')}")
+    st.text(read_text_file(info.get("filepath", "")) or "Fichier introuvable.")
+else:
+    st.caption("Aucune synthèse générée pour le moment.")
+
+st.divider()

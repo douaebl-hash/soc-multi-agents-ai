@@ -1,0 +1,29 @@
+=== RAPPORT SOC — 2026-06-20T18:02:01.598453 ===
+
+ # RAPPORT D'INCIDENT DE SÉCURITÉ
+
+## 1. Résumé Exécutif
+SQL Injection attaque détectée sur notre système SIEM (Source IP : 185.220.101.5) avec un score de risque élevé (7.6). L'impact potentiel est médium et l'urgence est élevée en raison du type d'attaque.
+
+## 2. Description Détaillée
+Le 20 juin 2026 à 16h01, un SQL Injection a été détecté dans une requête HTTP POST provenant de l'adresse IP 185.220.101.5 sur notre système SIEM. Les alertes du SIEM et le Log Management (LLM) ont confirmé cette attaque.
+
+## 3. Indicateurs de Compromission (IoC)
+- Source IP : 185.220.101.5
+- Anomalies détectées : ['[SIEM ALERT] Web Exploitation - SQL Injection - Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5', '[LLM] SQL Injection attempt detected from IP 185.220.101.5']
+
+## 4. Impact Évalué
+Le système affecté est le SIEM, cependant, il y a un risque potentiel de compromission de données stockées dans ce système. La continuité de service n'est pas pour l'instant compromise mais doit être surveillée étroitement.
+
+## 5. Recommandations de Mitigation
+- Bloquer l'adresse IP 185.220.101.5 immédiatement.
+- Effectuer une analyse approfondie du système SIEM pour détecter toute intrusion potentielle.
+- Mettre à jour les protections en place contre les attaques SQL Injection.
+
+## 6. Actions Suggérées pour l'Agent Exécuteur
+- Bloquer l'adresse IP 185.220.101.5 sur tous les points de terminaison réseau.
+- Isoler le système SIEM et effectuer une analyse approfondie.
+- Notifier la équipe de sécurité informatique pour qu'elle prenne en charge l'analyse approfondie et la mise à jour des protections.
+
+## 7. Conclusion
+L'incident est en cours d'enquête, nous recommandons de surveiller étroitement le système SIEM et de prendre les mesures correctives indiquées pour réduire le risque potentiel de compromission. Nous continuerons à vous informer des prochaines étapes de surveillance.

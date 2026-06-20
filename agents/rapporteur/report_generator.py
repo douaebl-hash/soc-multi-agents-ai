@@ -10,7 +10,6 @@ from langchain.prompts import PromptTemplate
 from templates import (
     get_incident_report_template,
     get_summary_template,
-    get_dashboard_template,
 )
 
 # ─── Configuration ─────────────────────────────────────────────────────────────

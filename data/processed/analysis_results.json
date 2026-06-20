@@ -192,5 +192,92 @@
     },
     "correlation_alert": null,
     "original_message": "[SIEM ALERT] Brute Force Attack - SSH - More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100"
+  },
+  {
+    "event_id": "ddd9feea9f6177e7",
+    "timestamp": "2026-06-20T16:01:22Z",
+    "analyzed_at": "2026-06-20T16:56:13.425933+00:00",
+    "source": "siem",
+    "event_type": "EXPLOIT_ATTEMPT",
+    "final_severity": 0.76,
+    "severity_label": "MEDIUM",
+    "entities": {
+      "ips": [
+        "185.220.101.5"
+      ],
+      "ports": [],
+      "users": [],
+      "is_failed_auth": false
+    },
+    "llm_analysis": {
+      "attack_summary": "SQL Injection attempt detected from IP 185.220.101.5",
+      "attack_technique": "T1070 - 20096 (Web Application: SQL Injection)",
+      "affected_assets": [
+        "185.220.101.5"
+      ],
+      "recommended_action": "Investigate the source IP, block it if malicious activity is confirmed, and review web application security measures",
+      "confidence": 0.9,
+      "needs_escalation": true
+    },
+    "correlation_alert": null,
+    "original_message": "[SIEM ALERT] Web Exploitation - SQL Injection - Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5"
+  },
+  {
+    "event_id": "1329b010af637f57",
+    "timestamp": "2026-06-20T16:03:40Z",
+    "analyzed_at": "2026-06-20T16:57:25.678408+00:00",
+    "source": "siem",
+    "event_type": "BRUTE_FORCE_ATTEMPT",
+    "final_severity": 0.86,
+    "severity_label": "HIGH",
+    "entities": {
+      "ips": [
+        "192.168.1.100"
+      ],
+      "ports": [],
+      "users": [
+        "user"
+      ],
+      "is_failed_auth": true
+    },
+    "llm_analysis": {
+      "attack_summary": "More than 15 failed SSH authentication attempts for user 'root' from IP '192.168.1.100'",
+      "attack_technique": "Brute Force (Credential Access, T1110)",
+      "affected_assets": [
+        "192.168.1.100"
+      ],
+      "recommended_action": "Lock the affected account and investigate potential sources of the brute force attack",
+      "confidence": 0.9,
+      "needs_escalation": true
+    },
+    "correlation_alert": null,
+    "original_message": "[SIEM ALERT] Brute Force Attack - SSH - More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100"
+  },
+  {
+    "event_id": "7bcfbf0bb22d674e",
+    "timestamp": "2026-06-20T16:05:10Z",
+    "analyzed_at": "2026-06-20T17:03:03.130962+00:00",
+    "source": "siem",
+    "event_type": "MALWARE_ACTIVITY",
+    "final_severity": 0.9,
+    "severity_label": "HIGH",
+    "entities": {
+      "ips": [],
+      "ports": [],
+      "users": [],
+      "is_failed_auth": false
+    },
+    "llm_analysis": {
+      "attack_summary": "Mass file rename and deletion activity by ransomware detected on FileServer-01",
+      "attack_technique": "File Deletion (T1486)",
+      "affected_assets": [
+        "FileServer-01"
+      ],
+      "recommended_action": "Isolate the affected asset, backup data, and initiate incident response procedures",
+      "confidence": 0.9,
+      "needs_escalation": true
+    },
+    "correlation_alert": null,
+    "original_message": "[SIEM ALERT] Malware - Ransomware Activity - CRITICAL: Mass file rename and deletion activity detected on FileServer-01"
   }
 ]

@@ -4,7 +4,7 @@
     "timestamp": "2026-06-20T16:01:22Z",
     "source_ip": "185.220.101.5",
     "dest_ip": "Inconnue",
-    "attack_type": "T1207 - SQL Injection",
+    "attack_type": "T1070 - 20096 (Web Application: SQL Injection)",
     "severity": "MEDIUM",
     "anomalies": [
       "[SIEM ALERT] Web Exploitation - SQL Injection - Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5",
@@ -15,16 +15,16 @@
     "risk_score": 7.6,
     "false_positive": false,
     "event_type": "EXPLOIT_ATTEMPT",
-    "analyzed_at": "2026-06-20T16:20:50.172402+00:00",
-    "mitre_technique": "T1207 - SQL Injection",
-    "recommended_action": "Investigate and block the IP address, review logs for further information, and apply patches to vulnerable web applications.",
+    "analyzed_at": "2026-06-20T16:56:13.425933+00:00",
+    "mitre_technique": "T1070 - 20096 (Web Application: SQL Injection)",
+    "recommended_action": "Investigate the source IP, block it if malicious activity is confirmed, and review web application security measures",
     "needs_escalation": true,
     "correlation_pattern": "",
     "llm_confidence": 0.9,
     "affected_assets": [
       "185.220.101.5"
     ],
-    "recorded_at": "2026-06-20T17:27:43.063643"
+    "recorded_at": "2026-06-20T17:56:54.900153"
   },
   "1329b010af637f57": {
     "incident_id": "1329b010af637f57",
@@ -42,7 +42,7 @@
     "risk_score": 8.6,
     "false_positive": false,
     "event_type": "BRUTE_FORCE_ATTEMPT",
-    "analyzed_at": "2026-06-20T16:22:01.313496+00:00",
+    "analyzed_at": "2026-06-20T16:42:09.919049+00:00",
     "mitre_technique": "Brute Force (Credential Access, T1110)",
     "recommended_action": "Lock the affected account and investigate potential sources of the brute force attack",
     "needs_escalation": true,
@@ -51,7 +51,7 @@
     "affected_assets": [
       "192.168.1.100"
     ],
-    "recorded_at": "2026-06-20T17:41:23.165566"
+    "recorded_at": "2026-06-20T17:56:54.900153"
   },
   "7bcfbf0bb22d674e": {
     "incident_id": "7bcfbf0bb22d674e",
@@ -78,7 +78,7 @@
     "affected_assets": [
       "FileServer-01"
     ],
-    "recorded_at": "2026-06-20T17:35:06.441833"
+    "recorded_at": "2026-06-20T17:56:54.900153"
   },
   "e34386f050aa72b7": {
     "incident_id": "e34386f050aa72b7",
@@ -105,7 +105,7 @@
     "affected_assets": [
       "production database"
     ],
-    "recorded_at": "2026-06-20T17:35:06.441833"
+    "recorded_at": "2026-06-20T17:56:54.900153"
   },
   "4dd906532894150c": {
     "incident_id": "4dd906532894150c",
@@ -129,6 +129,6 @@
     "correlation_pattern": "",
     "llm_confidence": null,
     "affected_assets": [],
-    "recorded_at": "2026-06-20T17:35:06.441833"
+    "recorded_at": "2026-06-20T17:56:54.900153"
   }
 }
