@@ -374,6 +374,15 @@ else:
                 content = read_text_file(filepath)
                 if content:
                     st.markdown(content)
+                    
+                    # 📥 Bouton de téléchargement du rapport individuel
+                    st.download_button(
+                        label="📥 Télécharger ce rapport",
+                        data=content,
+                        file_name=filename,
+                        mime="text/plain",
+                        key=f"dl_{filename}"
+                    )
                 else:
                     st.caption("Fichier introuvable.")
 
@@ -390,7 +399,20 @@ meta = get_shared_meta()
 info = meta.get("last_summary_report")
 if info:
     st.caption(f"Généré le {info.get('generated_at', 'N/A')}")
-    st.text(read_text_file(info.get("filepath", "")) or "Fichier introuvable.")
+    summary_content = read_text_file(info.get("filepath", ""))
+    
+    if summary_content:
+        st.text(summary_content)
+        
+        # 📥 Bouton de téléchargement de la synthèse globale
+        st.download_button(
+            label="📥 Télécharger la synthèse globale",
+            data=summary_content,
+            file_name=os.path.basename(info.get("filepath", "synthese_globale.txt")),
+            mime="text/plain"
+        )
+    else:
+        st.caption("Fichier introuvable.")
 else:
     st.caption("Aucune synthèse générée pour le moment.")
 
