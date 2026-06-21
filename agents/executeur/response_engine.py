@@ -100,6 +100,18 @@ FORBIDDEN_PATTERNS = [
 
 
 class ResponseEngine:
+    def notify_admin(self, message: str, severity: str = "HIGH", incident_id: str = "") -> dict:
+        """Public wrapper for unified email notifications from executeur_agent."""
+        start = time.perf_counter()
+        params = {
+            "message": message,
+            "severity": severity,
+            "incident_id": incident_id,
+        }
+        return self._real_notify_admin(params, start)
+    
+
+    
     def __init__(self, dry_run: bool = False, require_confirmation: bool = False):
         self.dry_run = dry_run
         self.require_confirmation = require_confirmation

@@ -1,7 +1,12 @@
 """
 executeur_agent.py
-AI-Driven Agent Exécuteur — Based on the ORIGINAL working approach.
-Uses simple LangChain invoke + asks Mistral for clean JSON.
+Agent Exécuteur — Per-Incident Email with Action Tracking.
+
+Sends ONE email per incident showing:
+  - What the Rapporteur suggested
+  - What was actually executed (automated)
+  - What requires manual intervention
+  - Summary at the end
 """
 
 import json
@@ -63,7 +68,7 @@ class ExecuteurAgent:
         self._running = False
 
     def run(self):
-        log.info("[START] Agent Exécuteur running. Polling for incidents...")
+        log.info("[START] Agent Exécuteur (Per-Incident Email) running...")
         while self._running:
             try:
                 self._poll_cycle()
@@ -108,94 +113,306 @@ class ExecuteurAgent:
             self._log_skip(inc_id, severity)
             return
 
-        # Fetch rapporteur report
+        # Step 1: Fetch Rapporteur report
         report_content = self._fetch_rapporteur_report(inc_id)
-        log.info(f"[REPORT] {inc_id} — rapporteur report {'found' if report_content else 'not found'}")
+        has_report = bool(report_content)
 
-        # LLM generates the response plan
-        response_plan = self._generate_response_plan(incident, report_content)
+        if not has_report:
+            log.warning(f"[REPORT] {inc_id} — NO Rapporteur report found!")
+        else:
+            log.info(f"[REPORT] {inc_id} — Rapporteur report FOUND ({len(report_content)} chars)")
+
+        # Extract Rapporteur suggested actions BEFORE translation
+        suggested_actions = self._extract_suggested_actions(report_content)
+
+        # Step 2: Mistral translates to commands
+        response_plan = self._translate_to_commands(incident, report_content)
+
         if not response_plan:
-            log.error(f"[FAIL] {inc_id} — could not generate response plan")
+            log.error(f"[FAIL] {inc_id} — Could not translate Rapporteur recommendations")
             return
 
         reasoning = response_plan.get("reasoning", "No reasoning provided")
         actions = response_plan.get("actions", [])
-        log.info(f"[PLAN] {inc_id} — {len(actions)} action(s) | Reason: {reasoning[:100]}...")
+        log.info(f"[PLAN] {inc_id} — {len(actions)} command(s) from Mistral")
 
-        # Execute each action
-        action_results = []
+        # Step 3: Execute all commands and collect results
+        automated_results = []
+        manual_tasks = []
+
         for action_def in actions:
             result = self.engine.execute(action_def, incident)
-            action_results.append(result)
+
+            # Categorize: automated vs manual
+            if result["status"] in ["success", "simulated"]:
+                automated_results.append(result)
+            elif result["status"] == "blocked_by_policy":
+                manual_tasks.append({
+                    "task": f"Manual review required: {result['action']} on {result.get('target', 'N/A')}",
+                    "reason": result["details"],
+                    "original_action": result["action"]
+                })
+            elif result["status"] in ["pending_confirmation", "failed"]:
+                manual_tasks.append({
+                    "task": f"Action failed/needs confirmation: {result['action']}",
+                    "reason": result["details"],
+                    "original_action": result["action"]
+                })
+
+            log.info(f"[EXECUTE] {result['action']} -> {result['status']} | {result['details'][:60]}...")
             time.sleep(0.1)
 
-        # Build execution record
+        # Step 4: Build per-incident email with action tracking
+        self._send_incident_email(incident, suggested_actions, automated_results, manual_tasks, report_content)
+
+        # Step 5: Log everything
         execution_record = {
             "execution_id": f"exec_{inc_id}_{int(time.time())}",
             "incident_id": inc_id,
             "timestamp": datetime.now(timezone.utc).isoformat(),
-            "actions_taken": action_results,
+            "actions_taken": automated_results + [{"task": t["task"], "status": "manual"} for t in manual_tasks],
             "ai_reasoning": reasoning,
-            "playbook_used": "ai_generated",
+            "rapporteur_report_used": has_report,
+            "playbook_used": "command_translator",
             "executed_by": "executeur_agent",
-            "requires_human_review": severity == "CRITICAL",
+            "requires_human_review": len(manual_tasks) > 0 or severity == "CRITICAL",
         }
 
         self.logger.log(execution_record)
         self._append_to_channel("execution_log", execution_record)
-        log.info(f"[DONE] {inc_id} — {len(action_results)} action(s) executed")
+        log.info(f"[DONE] {inc_id} — {len(automated_results)} automated, {len(manual_tasks)} manual tasks")
 
-    def _generate_response_plan(self, incident: dict, report_content: str) -> Optional[dict]:
-        """Ask Mistral to generate a structured response plan."""
+    def _extract_suggested_actions(self, report_content: str) -> List[str]:
+        """Extract the 'Actions Suggérées pour l\'Agent Exécuteur' section from report."""
+        if not report_content:
+            return []
+
+        lines = report_content.split('\n')
+        suggested = []
+        in_actions_section = False
+
+        for line in lines:
+            stripped = line.strip()
+            # Detect start of Actions Suggérées section
+            if any(keyword in stripped.lower() for keyword in [
+                "actions suggérées", "actions suggerees", 
+                "actions suggérées pour l'agent", "actions suggerees pour l'agent",
+                "actions for executeur", "suggested actions"
+            ]):
+                in_actions_section = True
+                continue
+            # Detect end of section (next ## header)
+            if in_actions_section and stripped.startswith('##'):
+                break
+            # Collect bullet points in the section
+            if in_actions_section and stripped:
+                # Skip empty lines and section headers
+                if stripped.startswith('#') or not stripped:
+                    continue
+                # Clean up bullet markers
+                clean = re.sub(r'^[\s\-•\*\d\.]+', '', stripped).strip()
+                if clean:
+                    suggested.append(clean)
+
+        return suggested
+
+    def _send_incident_email(self, incident: dict, suggested_actions: List[str], 
+                             automated_results: list, manual_tasks: list, report_content: str):
+        """Send ONE email per incident tracking Rapporteur suggestions vs execution."""
+        inc_id = incident.get("incident_id", "UNKNOWN")
+        severity = incident.get("severity", "UNKNOWN")
+        attack_type = incident.get("attack_type", "Unknown")
+        source_ip = incident.get("source_ip", "N/A")
+
+        executed_count = len(automated_results)
+        manual_count = len(manual_tasks)
+        total_suggested = len(suggested_actions)
+
+        # Build email content
+        email_lines = []
+
+        # ═══════════════════════════════════════════════════════════════
+        # HEADER
+        # ═══════════════════════════════════════════════════════════════
+        email_lines.append(f"""🛡️ SOC SECURITY ALERT — INCIDENT RESPONSE REPORT
+{'='*65}
+📌 Incident ID: {inc_id}
+🔴 Severity: {severity}
+🎯 Attack Type: {attack_type}
+🌐 Source IP: {source_ip}
+⏰ Time: {datetime.now(timezone.utc).isoformat()}
+🤖 Mode: {"REAL EXECUTION" if not self.dry_run else "SIMULATION MODE"}
+{'='*65}
+""")
+
+        # ═══════════════════════════════════════════════════════════════
+        # SECTION 1: RAPPORTEUR SUGGESTED ACTIONS
+        # ═══════════════════════════════════════════════════════════════
+        email_lines.append("""
+📋 ACTIONS SUGGÉRÉES PAR LE RAPPORTEUR
+────────────────────────────────────────
+""")
+        if suggested_actions:
+            for i, action in enumerate(suggested_actions, 1):
+                email_lines.append(f"   {i}. 📌 {action}")
+        else:
+            email_lines.append("   ⚠️ Aucune action spécifique suggérée dans le rapport.")
+        email_lines.append("")
+
+        # ═══════════════════════════════════════════════════════════════
+        # SECTION 2: EXECUTED ACTIONS (Automated)
+        # ═══════════════════════════════════════════════════════════════
+        email_lines.append("""
+✅ ACTIONS EXÉCUTÉES AUTOMATIQUEMENT
+────────────────────────────────────
+""")
+        if automated_results:
+            for i, result in enumerate(automated_results, 1):
+                status_icon = "✅" if result["status"] == "success" else "🧪"
+                email_lines.append(f"""
+   {i}. {status_icon} {result['action']}
+      ├─ Target: {result.get('target', 'N/A')}
+      ├─ Status: {result['status'].upper()}
+      ├─ Details: {result['details']}
+      └─ Duration: {result['duration_ms']}ms
+""")
+        else:
+            email_lines.append("   ❌ Aucune action n\'a été exécutée automatiquement.")
+        email_lines.append("")
+
+        # ═══════════════════════════════════════════════════════════════
+        # SECTION 3: MANUAL INTERVENTION REQUIRED
+        # ═══════════════════════════════════════════════════════════════
+        email_lines.append("""
+🔧 INTERVENTION MANUELLE REQUISE
+─────────────────────────────────
+""")
+        if manual_tasks:
+            for i, task in enumerate(manual_tasks, 1):
+                email_lines.append(f"""
+   {i}. ⚠️ {task['task']}
+      ├─ Raison: {task['reason']}
+      └─ 🔴 Action requise: Veuillez examiner et exécuter manuellement si approprié.
+""")
+        else:
+            email_lines.append("   ✅ Aucune intervention manuelle requise.")
+        email_lines.append("")
+
+        # ═══════════════════════════════════════════════════════════════
+        # SECTION 4: SUMMARY
+        # ═══════════════════════════════════════════════════════════════
+        email_lines.append(f"""
+{'='*65}
+📊 RÉSUMÉ DE L'INCIDENT
+{'='*65}
+
+   📋 Actions suggérées par le Rapporteur : {total_suggested}
+   ✅ Actions exécutées automatiquement   : {executed_count}
+   🔧 Actions nécessitant intervention manuelle : {manual_count}
+   📈 Taux d\'automatisation              : {self._calc_automation_rate(executed_count, manual_count, total_suggested)}%
+
+""")
+
+        # Status summary
+        if executed_count > 0 and manual_count == 0:
+            email_lines.append("   🟢 STATUT: Toutes les actions ont été exécutées automatiquement.")
+        elif executed_count > 0 and manual_count > 0:
+            email_lines.append("   🟡 STATUT: Actions partiellement automatisées — intervention requise.")
+        elif executed_count == 0 and manual_count > 0:
+            email_lines.append("   🔴 STATUT: Aucune action automatisée — intervention manuelle totale requise.")
+        else:
+            email_lines.append("   ⚪ STATUT: Aucune action à exécuter pour cet incident.")
+
+        email_lines.append(f"""
+
+   💡 Recommandation:
+   {"Veuillez procéder aux actions manuelles listées ci-dessus." if manual_count > 0 else "Aucune action supplémentaire requise."}
+
+{'='*65}
+Generated by SOC Multi-Agent System
+Agent: Exécuteur | Mode: {"REAL" if not self.dry_run else "SIMULATION"}
+{'='*65}
+""")
+
+        # Combine and send
+        unified_message = "\n".join(email_lines)
+
+        email_result = self.engine.notify_admin(
+            message=unified_message,
+            severity=severity,
+            incident_id=inc_id
+        )
+
+        log.info(f"[EMAIL] Incident email sent: {email_result['status']}")
+        if email_result['status'] == 'success':
+            log.info(f"[EMAIL] ✅ Email sent for incident {inc_id}")
+
+        return email_result
+
+    def _calc_automation_rate(self, executed: int, manual: int, suggested: int) -> int:
+        """Calculate automation rate percentage."""
+        total = executed + manual
+        if total == 0:
+            return 0 if suggested == 0 else 0
+        return round((executed / total) * 100)
+
+    def _translate_to_commands(self, incident: dict, report_content: str) -> Optional[dict]:
+        """Ask Mistral to translate Rapporteur recommendations into specific commands."""
         try:
             incident_json = json.dumps(incident, indent=2, default=str, ensure_ascii=False)
 
-            # SIMPLE prompt — just like the original working version
-            prompt = f"""You are a SOC response orchestrator AI.
+            prompt = f"""You are a SOC command translator AI.
 
-Analyze this security incident and decide which actions to execute.
+The Rapporteur has decided what to do. Your job is to translate into specific commands.
 
-Available actions: BLOCK_IP, UNBLOCK_IP, BLOCK_PORT, KILL_PROCESS, DISABLE_USER, FLUSH_DNS, NOTIFY_ADMIN, LOG_ONLY.
+AVAILABLE COMMANDS:
+- BLOCK_IP: Block an IP. Parameters: ip, duration_minutes
+- UNBLOCK_IP: Remove IP block. Parameters: ip
+- BLOCK_PORT: Block a port. Parameters: port
+- KILL_PROCESS: Terminate process. Parameters: process
+- DISABLE_USER: Disable account. Parameters: user
+- FLUSH_DNS: Clear DNS cache. Parameters: none
+- NOTIFY_ADMIN: Send alert. Parameters: message, severity
+- LOG_ONLY: Log incident. Parameters: reason
 
-Rules:
-- CRITICAL: block IP + notify
-- HIGH: block IP + notify
-- MEDIUM/LOW: notify or log
+RULES:
+- Follow Rapporteur recommendations EXACTLY
+- If Rapporteur says "block IP", use BLOCK_IP
+- If Rapporteur says "notify", use NOTIFY_ADMIN
+- If Rapporteur says "isolate host", use BLOCK_PORT or LOG_ONLY
 - NEVER block internal IPs (10.x, 172.16-31.x, 192.168.x)
+- For internal IPs, use LOG_ONLY instead of BLOCK_IP
 
-Incident:
+=== INCIDENT ===
 {incident_json}
 
-Report:
+=== RAPPORTEUR REPORT (FOLLOW THIS) ===
 {report_content or "No report available."}
 
-Respond with ONLY this JSON (no other text):
-{{"reasoning": "brief justification", "actions": [{{"action": "BLOCK_IP", "parameters": {{"ip": "203.0.113.50", "duration_minutes": 60}}, "reasoning": "blocking attacker"}}]}}"""
+Respond with ONLY this JSON:
+{{"reasoning": "Translating Rapporteur recommendations", "actions": [{{"action": "BLOCK_IP", "parameters": {{"ip": "203.0.113.50", "duration_minutes": 60}}, "reasoning": "Rapporteur said block"}}]}}"""
 
-            log.info(f"[LLM] Sending incident {incident.get('incident_id', '?')} to Mistral...")
+            log.info(f"[LLM] Translating recommendations for {incident.get('incident_id', '?')}...")
             raw = self.llm.invoke(prompt)
 
-            log.info(f"[LLM] Raw response: {raw[:200]}...")
-
-            # Extract JSON — multiple strategies
             parsed = self._extract_json(raw)
 
             if parsed and "actions" in parsed:
-                log.info(f"[LLM] SUCCESS — {len(parsed['actions'])} action(s) suggested")
+                log.info(f"[LLM] SUCCESS — {len(parsed['actions'])} command(s)")
                 return parsed
             else:
-                log.warning("[LLM] Response missing 'actions' field")
-                return self._fallback_response_plan(incident)
+                log.warning("[LLM] Invalid response, using fallback")
+                return self._fallback_translate(incident, report_content)
 
         except Exception as e:
-            log.error(f"[LLM] Call failed: {e}")
-            return self._fallback_response_plan(incident)
+            log.error(f"[LLM] Failed: {e}")
+            return self._fallback_translate(incident, report_content)
 
     def _extract_json(self, text: str) -> Optional[dict]:
-        """Extract JSON from Mistral response."""
+        """Extract JSON from text."""
         text = text.strip()
 
-        # Strategy 1: Find JSON between ``` and ```
+        # Strategy 1: Fences
         match = re.search(r'```(?:json)?\s*\n(.*?)\n```', text, re.DOTALL)
         if match:
             try:
@@ -203,7 +420,7 @@ Respond with ONLY this JSON (no other text):
             except:
                 pass
 
-        # Strategy 2: Find first { to last }
+        # Strategy 2: First { to last }
         try:
             start = text.index('{')
             end = text.rindex('}') + 1
@@ -211,7 +428,7 @@ Respond with ONLY this JSON (no other text):
         except:
             pass
 
-        # Strategy 3: Try entire text
+        # Strategy 3: Entire text
         try:
             return json.loads(text)
         except:
@@ -219,8 +436,8 @@ Respond with ONLY this JSON (no other text):
 
         return None
 
-    def _fallback_response_plan(self, incident: dict) -> dict:
-        """Deterministic fallback when LLM fails."""
+    def _fallback_translate(self, incident: dict, report_content: str) -> dict:
+        """Parse Rapporteur report manually and create commands."""
         severity = (incident.get("severity", "") or "").upper()
         source_ip = incident.get("source_ip", "")
         inc_id = incident.get("incident_id", "UNKNOWN")
@@ -230,18 +447,55 @@ Respond with ONLY this JSON (no other text):
                      self.engine._is_valid_ip(source_ip))
 
         actions = []
-        if severity == "CRITICAL":
-            if is_public:
-                actions.append({"action": "BLOCK_IP", "parameters": {"ip": source_ip, "duration_minutes": 120}, "reasoning": "Critical: blocking attacker"})
-            actions.append({"action": "NOTIFY_ADMIN", "parameters": {"message": f"CRITICAL incident {inc_id}", "severity": "CRITICAL"}, "reasoning": "Critical: notify team"})
-        elif severity == "HIGH":
-            if is_public:
-                actions.append({"action": "BLOCK_IP", "parameters": {"ip": source_ip, "duration_minutes": 60}, "reasoning": "High: blocking attacker"})
-            actions.append({"action": "NOTIFY_ADMIN", "parameters": {"message": f"HIGH incident {inc_id}", "severity": "HIGH"}, "reasoning": "High: notify team"})
-        else:
-            actions.append({"action": "LOG_ONLY", "parameters": {"reason": f"Severity {severity} below threshold"}, "reasoning": "Low severity, log only"})
 
-        return {"reasoning": f"Fallback (severity={severity})", "actions": actions}
+        if report_content:
+            report_lower = report_content.lower()
+
+            if "bloquer" in report_lower or "block" in report_lower:
+                if is_public:
+                    actions.append({
+                        "action": "BLOCK_IP",
+                        "parameters": {"ip": source_ip, "duration_minutes": 120 if severity == "CRITICAL" else 60},
+                        "reasoning": "Rapporteur recommended blocking IP"
+                    })
+                else:
+                    actions.append({
+                        "action": "LOG_ONLY",
+                        "parameters": {"reason": f"Rapporteur recommended blocking internal IP {source_ip} — blocked by policy"},
+                        "reasoning": "Internal IP blocking prohibited"
+                    })
+
+            if "isoler" in report_lower or "isolate" in report_lower:
+                actions.append({
+                    "action": "LOG_ONLY",
+                    "parameters": {"reason": "Rapporteur recommended isolation — requires manual network configuration"},
+                    "reasoning": "Host isolation requires manual intervention"
+                })
+
+            if "notifier" in report_lower or "notify" in report_lower:
+                if not any(a["action"] == "NOTIFY_ADMIN" for a in actions):
+                    actions.append({
+                        "action": "NOTIFY_ADMIN",
+                        "parameters": {
+                            "message": f"Incident {inc_id}: {incident.get('attack_type', 'Unknown')} — Rapporteur recommends immediate attention",
+                            "severity": severity
+                        },
+                        "reasoning": "Rapporteur recommended notification"
+                    })
+
+        if not actions:
+            if severity == "CRITICAL":
+                if is_public:
+                    actions.append({"action": "BLOCK_IP", "parameters": {"ip": source_ip, "duration_minutes": 120}, "reasoning": "Critical: blocking attacker"})
+                actions.append({"action": "NOTIFY_ADMIN", "parameters": {"message": f"CRITICAL incident {inc_id}", "severity": "CRITICAL"}, "reasoning": "Critical: notify team"})
+            elif severity == "HIGH":
+                if is_public:
+                    actions.append({"action": "BLOCK_IP", "parameters": {"ip": source_ip, "duration_minutes": 60}, "reasoning": "High: blocking attacker"})
+                actions.append({"action": "NOTIFY_ADMIN", "parameters": {"message": f"HIGH incident {inc_id}", "severity": "HIGH"}, "reasoning": "High: notify team"})
+            else:
+                actions.append({"action": "LOG_ONLY", "parameters": {"reason": f"Severity {severity}"}, "reasoning": "Low severity"})
+
+        return {"reasoning": f"Fallback translation (severity={severity})", "actions": actions}
 
     def _fetch_rapporteur_report(self, incident_id: str) -> str:
         if not os.path.exists(self.reports_dir):
@@ -287,6 +541,7 @@ Respond with ONLY this JSON (no other text):
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "actions_taken": [],
             "ai_reasoning": "Incident below severity threshold",
+            "rapporteur_report_used": False,
             "playbook_used": "none",
             "executed_by": "executeur_agent",
             "requires_human_review": False,
@@ -297,7 +552,7 @@ Respond with ONLY this JSON (no other text):
 
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description="Agent Exécuteur SOC")
+    parser = argparse.ArgumentParser(description="Agent Exécuteur SOC (Per-Incident Email)")
     parser.add_argument("--model", default="mistral")
     parser.add_argument("--poll-interval", type=float, default=3.0)
     parser.add_argument("--dry-run", action="store_true")
