@@ -40,7 +40,7 @@ streamlit>=1.35.0
 ### 3. Installer et démarrer Ollama
 
 ```bash
-# Installation Ollama (Linux)
+# Installation Ollama (Windows)
 irm https://ollama.com/install.ps1 | iex
 
 # Télécharger le modèle Mistral
