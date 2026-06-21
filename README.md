@@ -85,7 +85,7 @@ python agents/executeur/executeur_agent.py --model mistral
 ## 📊 Dashboard Streamlit
 
 ```bash
-streamlit run dashboard/app.py
+streamlit run dashboard_app.py
 ```
 Accéder à : `http://localhost:8501`
 
