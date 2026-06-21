@@ -80,16 +80,13 @@ python agents/rapporteur/rapporteur_agent.py --mode poll
 
 ```bash
 python agents/executeur/executeur_agent.py --model mistral 
-
-
+```
 ---
-
 ## 📊 Dashboard Streamlit
 
 ```bash
 streamlit run dashboard/app.py
 ```
-
 Accéder à : `http://localhost:8501`
 
 Le dashboard affiche :
