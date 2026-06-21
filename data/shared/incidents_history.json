@@ -4,7 +4,7 @@
     "timestamp": "2026-06-20T16:01:22Z",
     "source_ip": "185.220.101.5",
     "dest_ip": "Inconnue",
-    "attack_type": "T1070 - 20096 (Web Application: SQL Injection)",
+    "attack_type": "T1070 - Application Layer Protocol/Service Denial (MITRE ATT&CK)",
     "severity": "MEDIUM",
     "anomalies": [
       "[SIEM ALERT] Web Exploitation - SQL Injection - Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5",
@@ -15,16 +15,16 @@
     "risk_score": 7.6,
     "false_positive": false,
     "event_type": "EXPLOIT_ATTEMPT",
-    "analyzed_at": "2026-06-20T16:56:13.425933+00:00",
-    "mitre_technique": "T1070 - 20096 (Web Application: SQL Injection)",
-    "recommended_action": "Investigate the source IP, block it if malicious activity is confirmed, and review web application security measures",
+    "analyzed_at": "2026-06-21T21:06:12.208419+00:00",
+    "mitre_technique": "T1070 - Application Layer Protocol/Service Denial (MITRE ATT&CK)",
+    "recommended_action": "Investigate the source IP, block it if malicious activity is confirmed and review web application firewall rules",
     "needs_escalation": true,
     "correlation_pattern": "",
     "llm_confidence": 0.9,
     "affected_assets": [
       "185.220.101.5"
     ],
-    "recorded_at": "2026-06-21T18:00:58.925529"
+    "recorded_at": "2026-06-21T22:06:31.123189"
   },
   "1329b010af637f57": {
     "incident_id": "1329b010af637f57",
@@ -42,35 +42,35 @@
     "risk_score": 8.6,
     "false_positive": false,
     "event_type": "BRUTE_FORCE_ATTEMPT",
-    "analyzed_at": "2026-06-20T16:57:25.678408+00:00",
+    "analyzed_at": "2026-06-21T21:06:15.047254+00:00",
     "mitre_technique": "Brute Force (Credential Access, T1110)",
-    "recommended_action": "Lock the affected account and investigate potential sources of the brute force attack",
+    "recommended_action": "Lock the affected account temporarily and investigate the source IP for potential threats",
     "needs_escalation": true,
     "correlation_pattern": "",
     "llm_confidence": 0.9,
     "affected_assets": [
       "192.168.1.100"
     ],
-    "recorded_at": "2026-06-21T18:00:58.925529"
+    "recorded_at": "2026-06-21T22:06:31.123189"
   },
   "7bcfbf0bb22d674e": {
     "incident_id": "7bcfbf0bb22d674e",
     "timestamp": "2026-06-20T16:05:10Z",
     "source_ip": "Inconnue",
     "dest_ip": "Inconnue",
-    "attack_type": "File Deletion (T1486)",
+    "attack_type": "File Deletion (T1483)",
     "severity": "HIGH",
     "anomalies": [
       "[SIEM ALERT] Malware - Ransomware Activity - CRITICAL: Mass file rename and deletion activity detected on FileServer-01",
-      "[LLM] Mass file rename and deletion activity by ransomware detected on FileServer-01"
+      "[LLM] Mass file rename and deletion activity, suspected ransomware on FileServer-01"
     ],
     "correlated_events": [],
     "affected_system": "siem",
     "risk_score": 9.0,
     "false_positive": false,
     "event_type": "MALWARE_ACTIVITY",
-    "analyzed_at": "2026-06-20T17:03:03.130962+00:00",
-    "mitre_technique": "File Deletion (T1486)",
+    "analyzed_at": "2026-06-21T21:06:17.475429+00:00",
+    "mitre_technique": "File Deletion (T1483)",
     "recommended_action": "Isolate the affected asset, backup data, and initiate incident response procedures",
     "needs_escalation": true,
     "correlation_pattern": "",
@@ -78,7 +78,7 @@
     "affected_assets": [
       "FileServer-01"
     ],
-    "recorded_at": "2026-06-21T18:00:58.925529"
+    "recorded_at": "2026-06-21T22:06:31.123189"
   },
   "e34386f050aa72b7": {
     "incident_id": "e34386f050aa72b7",
@@ -96,16 +96,16 @@
     "risk_score": 9.0,
     "false_positive": false,
     "event_type": "UNKNOWN",
-    "analyzed_at": "2026-06-20T16:32:31.448599+00:00",
+    "analyzed_at": "2026-06-21T21:06:19.973412+00:00",
     "mitre_technique": "Privilege Escalation (T1078)",
-    "recommended_action": "Immediate investigation and revocation of 'guest' privileges, reviewing logs for further anomalies, and implementing temporary access restrictions",
+    "recommended_action": "Immediate investigation and revocation of 'guest' privileges, system audit, and potential network isolation",
     "needs_escalation": true,
     "correlation_pattern": "",
     "llm_confidence": 0.9,
     "affected_assets": [
       "production database"
     ],
-    "recorded_at": "2026-06-21T18:00:58.925529"
+    "recorded_at": "2026-06-21T22:06:31.123189"
   },
   "4dd906532894150c": {
     "incident_id": "4dd906532894150c",
@@ -129,6 +129,160 @@
     "correlation_pattern": "",
     "llm_confidence": null,
     "affected_assets": [],
-    "recorded_at": "2026-06-21T18:00:58.925529"
+    "recorded_at": "2026-06-21T22:06:31.123189"
+  },
+  "f47381e7bfaacf11": {
+    "incident_id": "f47381e7bfaacf11",
+    "timestamp": "2026-06-20T16:19:48.057040+00:00",
+    "source_ip": "192.168.1.100",
+    "dest_ip": "Inconnue",
+    "attack_type": "Brute Force (Credential Access, T1110)",
+    "severity": "HIGH",
+    "anomalies": [
+      "[sshd[4321]@arch-secure] Failed password for invalid user admin from 192.168.1.100",
+      "[LLM] A brute force attempt was detected on IP 192.168.1.100, targeting the 'admin' user with an invalid password"
+    ],
+    "correlated_events": [],
+    "affected_system": "syslog",
+    "risk_score": 9.7,
+    "false_positive": false,
+    "event_type": "BRUTE_FORCE_ATTEMPT",
+    "analyzed_at": "2026-06-21T21:06:22.965181+00:00",
+    "mitre_technique": "Brute Force (Credential Access, T1110)",
+    "recommended_action": "Block the IP address temporarily and investigate for potential credential stuffing or password guessing attacks",
+    "needs_escalation": true,
+    "correlation_pattern": "",
+    "llm_confidence": 0.9,
+    "affected_assets": [
+      "192.168.1.100"
+    ],
+    "recorded_at": "2026-06-21T22:06:31.123189"
+  },
+  "81ffaa49e8826cb0": {
+    "incident_id": "81ffaa49e8826cb0",
+    "timestamp": "2026-06-20T16:19:48.562803+00:00",
+    "source_ip": "Inconnue",
+    "dest_ip": "Inconnue",
+    "attack_type": "Non classifié",
+    "severity": "LOW",
+    "anomalies": [
+      "[kernel@arch-secure] CRITICAL: intrusion detected on eth0"
+    ],
+    "correlated_events": [],
+    "affected_system": "syslog",
+    "risk_score": 1.0,
+    "false_positive": false,
+    "event_type": "UNKNOWN",
+    "analyzed_at": "2026-06-21T21:06:22.979187+00:00",
+    "mitre_technique": "",
+    "recommended_action": "",
+    "needs_escalation": false,
+    "correlation_pattern": "",
+    "llm_confidence": null,
+    "affected_assets": [],
+    "recorded_at": "2026-06-21T22:06:31.123189"
+  },
+  "f22a376271f08709": {
+    "incident_id": "f22a376271f08709",
+    "timestamp": "2026-06-20T16:19:49.087636+00:00",
+    "source_ip": "10.0.0.5",
+    "dest_ip": "Inconnue",
+    "attack_type": "Non classifié",
+    "severity": "HIGH",
+    "anomalies": [
+      "[nginx[999]@arch-secure] error 403 Forbidden from 10.0.0.5",
+      "[LLM] An unauthorized access attempt was made from IP 10.0.0.5 to nginx server"
+    ],
+    "correlated_events": [],
+    "affected_system": "syslog",
+    "risk_score": 9.1,
+    "false_positive": false,
+    "event_type": "UNKNOWN",
+    "analyzed_at": "2026-06-21T21:06:25.303894+00:00",
+    "mitre_technique": "Unknown",
+    "recommended_action": "Investigate the source of the unauthorized access attempt and implement temporary access restrictions if necessary",
+    "needs_escalation": true,
+    "correlation_pattern": "",
+    "llm_confidence": 0.7,
+    "affected_assets": [
+      "arch-secure"
+    ],
+    "recorded_at": "2026-06-21T22:06:31.123189"
+  },
+  "80c2eed5035b42a5": {
+    "incident_id": "80c2eed5035b42a5",
+    "timestamp": "2026-06-20T16:19:49.597568+00:00",
+    "source_ip": "Inconnue",
+    "dest_ip": "Inconnue",
+    "attack_type": "Non classifié",
+    "severity": "MEDIUM",
+    "anomalies": [
+      "[cron[111]@arch-secure] info: normal scheduled task ran ok",
+      "[LLM] A scheduled task has run successfully"
+    ],
+    "correlated_events": [],
+    "affected_system": "syslog",
+    "risk_score": 7.9,
+    "false_positive": false,
+    "event_type": "UNKNOWN",
+    "analyzed_at": "2026-06-21T21:06:27.120059+00:00",
+    "mitre_technique": "Unknown",
+    "recommended_action": "Monitor the system for any unusual activity related to this task",
+    "needs_escalation": false,
+    "correlation_pattern": "",
+    "llm_confidence": 0.3,
+    "affected_assets": [],
+    "recorded_at": "2026-06-21T22:06:31.123189"
+  },
+  "b8e605f4537f111f": {
+    "incident_id": "b8e605f4537f111f",
+    "timestamp": "2026-06-20T16:19:50.106249+00:00",
+    "source_ip": "192.168.1.200",
+    "dest_ip": "Inconnue",
+    "attack_type": "Brute Force (Credential Access, T1110)",
+    "severity": "HIGH",
+    "anomalies": [
+      "[sshd[4322]@arch-secure] Failed password for invalid user root from 192.168.1.200",
+      "[LLM] A brute force attempt was detected on IP 192.168.1.200, targeting SSH service with invalid user 'root'"
+    ],
+    "correlated_events": [],
+    "affected_system": "syslog",
+    "risk_score": 9.7,
+    "false_positive": false,
+    "event_type": "BRUTE_FORCE_ATTEMPT",
+    "analyzed_at": "2026-06-21T21:06:29.957469+00:00",
+    "mitre_technique": "Brute Force (Credential Access, T1110)",
+    "recommended_action": "Immediately block the IP address and investigate for potential compromises",
+    "needs_escalation": true,
+    "correlation_pattern": "",
+    "llm_confidence": 0.9,
+    "affected_assets": [
+      "192.168.1.200"
+    ],
+    "recorded_at": "2026-06-21T22:06:31.123189"
+  },
+  "c37164ba13abf1a0": {
+    "incident_id": "c37164ba13abf1a0",
+    "timestamp": "2026-06-20T16:19:50.612439+00:00",
+    "source_ip": "172.16.0.99",
+    "dest_ip": "Inconnue",
+    "attack_type": "Non classifié",
+    "severity": "LOW",
+    "anomalies": [
+      "[firewall@arch-secure] brute force attack detected from 172.16.0.99"
+    ],
+    "correlated_events": [],
+    "affected_system": "syslog",
+    "risk_score": 6.0,
+    "false_positive": false,
+    "event_type": "UNKNOWN",
+    "analyzed_at": "2026-06-21T21:06:29.976470+00:00",
+    "mitre_technique": "",
+    "recommended_action": "",
+    "needs_escalation": false,
+    "correlation_pattern": "",
+    "llm_confidence": null,
+    "affected_assets": [],
+    "recorded_at": "2026-06-21T22:06:31.123189"
   }
 }
