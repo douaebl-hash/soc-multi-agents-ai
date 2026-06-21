@@ -7934,5 +7934,45 @@
     "severity": 0.9,
     "message": "[SIEM ALERT] Privilege Escalation - Unauthorized - User 'guest' successfully executed sudo command without permissions on production database",
     "raw": "{\"timestamp\": \"2026-06-20T16:07:15Z\", \"rule_name\": \"Privilege Escalation - Unauthorized\", \"description\": \"User 'guest' successfully executed sudo command without permissions on production database\", \"severity\": \"critical\"}"
+  },
+  {
+    "event_id": "4dd906532894150c",
+    "timestamp": "2026-06-20T16:00:05Z",
+    "source": "siem",
+    "severity": 0.5,
+    "message": "[SIEM ALERT] Reconnaissance - Port Scanning - Host 192.168.1.150 triggered multiple connection drops on unique ports within 10 seconds",
+    "raw": "{\"timestamp\": \"2026-06-20T16:00:05Z\", \"rule_name\": \"Reconnaissance - Port Scanning\", \"description\": \"Host 192.168.1.150 triggered multiple connection drops on unique ports within 10 seconds\", \"severity\": \"medium\"}"
+  },
+  {
+    "event_id": "ddd9feea9f6177e7",
+    "timestamp": "2026-06-20T16:01:22Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Web Exploitation - SQL Injection - Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5",
+    "raw": "{\"timestamp\": \"2026-06-20T16:01:22Z\", \"rule_name\": \"Web Exploitation - SQL Injection\", \"description\": \"Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5\", \"severity\": \"high\"}"
+  },
+  {
+    "event_id": "1329b010af637f57",
+    "timestamp": "2026-06-20T16:03:40Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Brute Force Attack - SSH - More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100",
+    "raw": "{\"timestamp\": \"2026-06-20T16:03:40Z\", \"rule_name\": \"Brute Force Attack - SSH\", \"description\": \"More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100\", \"severity\": \"high\"}"
+  },
+  {
+    "event_id": "7bcfbf0bb22d674e",
+    "timestamp": "2026-06-20T16:05:10Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Malware - Ransomware Activity - CRITICAL: Mass file rename and deletion activity detected on FileServer-01",
+    "raw": "{\"timestamp\": \"2026-06-20T16:05:10Z\", \"rule_name\": \"Malware - Ransomware Activity\", \"description\": \"CRITICAL: Mass file rename and deletion activity detected on FileServer-01\", \"severity\": \"critical\"}"
+  },
+  {
+    "event_id": "e34386f050aa72b7",
+    "timestamp": "2026-06-20T16:07:15Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Privilege Escalation - Unauthorized - User 'guest' successfully executed sudo command without permissions on production database",
+    "raw": "{\"timestamp\": \"2026-06-20T16:07:15Z\", \"rule_name\": \"Privilege Escalation - Unauthorized\", \"description\": \"User 'guest' successfully executed sudo command without permissions on production database\", \"severity\": \"critical\"}"
   }
 ]
