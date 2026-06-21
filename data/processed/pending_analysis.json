@@ -5982,5 +5982,429 @@
     "severity": 0.9,
     "message": "[SIEM ALERT] Privilege Escalation - Unauthorized - User 'guest' successfully executed sudo command without permissions on production database",
     "raw": "{\"timestamp\": \"2026-06-20T16:07:15Z\", \"rule_name\": \"Privilege Escalation - Unauthorized\", \"description\": \"User 'guest' successfully executed sudo command without permissions on production database\", \"severity\": \"critical\"}"
+  },
+  {
+    "event_id": "ddd9feea9f6177e7",
+    "timestamp": "2026-06-20T16:01:22Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Web Exploitation - SQL Injection - Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5",
+    "raw": "{\"timestamp\": \"2026-06-20T16:01:22Z\", \"rule_name\": \"Web Exploitation - SQL Injection\", \"description\": \"Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5\", \"severity\": \"high\"}"
+  },
+  {
+    "event_id": "1329b010af637f57",
+    "timestamp": "2026-06-20T16:03:40Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Brute Force Attack - SSH - More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100",
+    "raw": "{\"timestamp\": \"2026-06-20T16:03:40Z\", \"rule_name\": \"Brute Force Attack - SSH\", \"description\": \"More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100\", \"severity\": \"high\"}"
+  },
+  {
+    "event_id": "7bcfbf0bb22d674e",
+    "timestamp": "2026-06-20T16:05:10Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Malware - Ransomware Activity - CRITICAL: Mass file rename and deletion activity detected on FileServer-01",
+    "raw": "{\"timestamp\": \"2026-06-20T16:05:10Z\", \"rule_name\": \"Malware - Ransomware Activity\", \"description\": \"CRITICAL: Mass file rename and deletion activity detected on FileServer-01\", \"severity\": \"critical\"}"
+  },
+  {
+    "event_id": "e34386f050aa72b7",
+    "timestamp": "2026-06-20T16:07:15Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Privilege Escalation - Unauthorized - User 'guest' successfully executed sudo command without permissions on production database",
+    "raw": "{\"timestamp\": \"2026-06-20T16:07:15Z\", \"rule_name\": \"Privilege Escalation - Unauthorized\", \"description\": \"User 'guest' successfully executed sudo command without permissions on production database\", \"severity\": \"critical\"}"
+  },
+  {
+    "event_id": "577359c1ad919621",
+    "timestamp": "2026-06-21T16:42:19.417682+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[sshd[4321]@arch-secure] Failed password for invalid user admin from 192.168.1.100",
+    "raw": "{\"raw\": \"<34>Jun 17 2026 15:25:00 arch-secure sshd[4321]: Failed password for invalid user admin from 192.168.1.100\", \"timestamp\": \"Jun 17 2026 15:25:00\", \"host\": \"arch-secure\", \"process\": \"sshd[4321]\", \"priority\": 34, \"message\": \"Failed password for invalid user admin from 192.168.1.100\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "b32b05de06a2643c",
+    "timestamp": "2026-06-21T16:42:19.896987+00:00",
+    "source": "syslog",
+    "severity": 0.1,
+    "message": "[kernel@arch-secure] CRITICAL: intrusion detected on eth0",
+    "raw": "{\"raw\": \"<1>Jun 17 2026 15:26:00 arch-secure kernel: CRITICAL: intrusion detected on eth0\", \"timestamp\": \"Jun 17 2026 15:26:00\", \"host\": \"arch-secure\", \"process\": \"kernel\", \"priority\": 1, \"message\": \"CRITICAL: intrusion detected on eth0\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "26e8a3aafb085d13",
+    "timestamp": "2026-06-21T16:42:20.399901+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[nginx[999]@arch-secure] error 403 Forbidden from 10.0.0.5",
+    "raw": "{\"raw\": \"<14>Jun 17 2026 15:27:00 arch-secure nginx[999]: error 403 Forbidden from 10.0.0.5\", \"timestamp\": \"Jun 17 2026 15:27:00\", \"host\": \"arch-secure\", \"process\": \"nginx[999]\", \"priority\": 14, \"message\": \"error 403 Forbidden from 10.0.0.5\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "e0117ff04c1e6876",
+    "timestamp": "2026-06-21T16:42:20.954330+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[cron[111]@arch-secure] info: normal scheduled task ran ok",
+    "raw": "{\"raw\": \"<86>Jun 17 2026 15:28:00 arch-secure cron[111]: info: normal scheduled task ran ok\", \"timestamp\": \"Jun 17 2026 15:28:00\", \"host\": \"arch-secure\", \"process\": \"cron[111]\", \"priority\": 86, \"message\": \"info: normal scheduled task ran ok\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "2a2927a117665026",
+    "timestamp": "2026-06-21T16:42:21.430952+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[sshd[4322]@arch-secure] Failed password for invalid user root from 192.168.1.200",
+    "raw": "{\"raw\": \"<34>Jun 17 2026 15:29:00 arch-secure sshd[4322]: Failed password for invalid user root from 192.168.1.200\", \"timestamp\": \"Jun 17 2026 15:29:00\", \"host\": \"arch-secure\", \"process\": \"sshd[4322]\", \"priority\": 34, \"message\": \"Failed password for invalid user root from 192.168.1.200\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "6b393856e036f2b9",
+    "timestamp": "2026-06-21T16:42:21.931526+00:00",
+    "source": "syslog",
+    "severity": 0.1,
+    "message": "[firewall@arch-secure] brute force attack detected from 172.16.0.99",
+    "raw": "{\"raw\": \"<1>Jun 17 2026 15:30:00 arch-secure firewall: brute force attack detected from 172.16.0.99\", \"timestamp\": \"Jun 17 2026 15:30:00\", \"host\": \"arch-secure\", \"process\": \"firewall\", \"priority\": 1, \"message\": \"brute force attack detected from 172.16.0.99\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "28d7e6d67c5be1be",
+    "timestamp": "2026-06-21T16:42:55.720433+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[sshd[4321]@arch-secure] Failed password for invalid user admin from 192.168.1.100",
+    "raw": "{\"raw\": \"<34>Jun 17 2026 15:25:00 arch-secure sshd[4321]: Failed password for invalid user admin from 192.168.1.100\", \"timestamp\": \"Jun 17 2026 15:25:00\", \"host\": \"arch-secure\", \"process\": \"sshd[4321]\", \"priority\": 34, \"message\": \"Failed password for invalid user admin from 192.168.1.100\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "48a97f8ddb00bd01",
+    "timestamp": "2026-06-21T16:42:56.299130+00:00",
+    "source": "syslog",
+    "severity": 0.1,
+    "message": "[kernel@arch-secure] CRITICAL: intrusion detected on eth0",
+    "raw": "{\"raw\": \"<1>Jun 17 2026 15:26:00 arch-secure kernel: CRITICAL: intrusion detected on eth0\", \"timestamp\": \"Jun 17 2026 15:26:00\", \"host\": \"arch-secure\", \"process\": \"kernel\", \"priority\": 1, \"message\": \"CRITICAL: intrusion detected on eth0\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "2e6304783ba787c9",
+    "timestamp": "2026-06-21T16:42:56.793752+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[nginx[999]@arch-secure] error 403 Forbidden from 10.0.0.5",
+    "raw": "{\"raw\": \"<14>Jun 17 2026 15:27:00 arch-secure nginx[999]: error 403 Forbidden from 10.0.0.5\", \"timestamp\": \"Jun 17 2026 15:27:00\", \"host\": \"arch-secure\", \"process\": \"nginx[999]\", \"priority\": 14, \"message\": \"error 403 Forbidden from 10.0.0.5\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "14f8bde6ea252bd1",
+    "timestamp": "2026-06-21T16:42:57.224984+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[cron[111]@arch-secure] info: normal scheduled task ran ok",
+    "raw": "{\"raw\": \"<86>Jun 17 2026 15:28:00 arch-secure cron[111]: info: normal scheduled task ran ok\", \"timestamp\": \"Jun 17 2026 15:28:00\", \"host\": \"arch-secure\", \"process\": \"cron[111]\", \"priority\": 86, \"message\": \"info: normal scheduled task ran ok\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "8c774b02db581be8",
+    "timestamp": "2026-06-21T16:42:57.802923+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[sshd[4322]@arch-secure] Failed password for invalid user root from 192.168.1.200",
+    "raw": "{\"raw\": \"<34>Jun 17 2026 15:29:00 arch-secure sshd[4322]: Failed password for invalid user root from 192.168.1.200\", \"timestamp\": \"Jun 17 2026 15:29:00\", \"host\": \"arch-secure\", \"process\": \"sshd[4322]\", \"priority\": 34, \"message\": \"Failed password for invalid user root from 192.168.1.200\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "05b96f03dc5d2749",
+    "timestamp": "2026-06-21T16:42:58.232627+00:00",
+    "source": "syslog",
+    "severity": 0.1,
+    "message": "[firewall@arch-secure] brute force attack detected from 172.16.0.99",
+    "raw": "{\"raw\": \"<1>Jun 17 2026 15:30:00 arch-secure firewall: brute force attack detected from 172.16.0.99\", \"timestamp\": \"Jun 17 2026 15:30:00\", \"host\": \"arch-secure\", \"process\": \"firewall\", \"priority\": 1, \"message\": \"brute force attack detected from 172.16.0.99\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "20882b5983894c8f",
+    "timestamp": "2024-01-15T14:45:00Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Privilege Escalation Attempt - Unauthorized sudo usage detected for root access",
+    "raw": "{\"timestamp\": \"2024-01-15T14:45:00Z\", \"rule_name\": \"Privilege Escalation Attempt\", \"description\": \"Unauthorized sudo usage detected for root access\", \"severity\": \"high\", \"src_ip\": \"10.0.0.30\", \"dst_ip\": \"10.0.0.30\", \"dst_port\": 0, \"protocol\": \"LOCAL\", \"alert_id\": \"SIEM-005\"}"
+  },
+  {
+    "event_id": "6f152028261dcd6c",
+    "timestamp": "2024-01-15T14:50:00Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Ransomware File Encryption - Mass file encryption activity detected on endpoint",
+    "raw": "{\"timestamp\": \"2024-01-15T14:50:00Z\", \"rule_name\": \"Ransomware File Encryption\", \"description\": \"Mass file encryption activity detected on endpoint\", \"severity\": \"critical\", \"src_ip\": \"10.0.0.45\", \"dst_ip\": \"10.0.0.45\", \"dst_port\": 0, \"protocol\": \"LOCAL\", \"alert_id\": \"SIEM-006\"}"
+  },
+  {
+    "event_id": "c2d496c22239c1a1",
+    "timestamp": "2024-01-15T15:00:00Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] DDoS Attack Incoming - High volume SYN flood attack detected on web server",
+    "raw": "{\"timestamp\": \"2024-01-15T15:00:00Z\", \"rule_name\": \"DDoS Attack Incoming\", \"description\": \"High volume SYN flood attack detected on web server\", \"severity\": \"critical\", \"src_ip\": \"0.0.0.0\", \"dst_ip\": \"10.0.0.80\", \"dst_port\": 80, \"protocol\": \"TCP\", \"alert_id\": \"SIEM-007\"}"
+  },
+  {
+    "event_id": "181987b30bba044c",
+    "timestamp": "2024-01-15T15:05:00Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Unauthorized Admin Login - Admin panel login from unknown IP outside business hours",
+    "raw": "{\"timestamp\": \"2024-01-15T15:05:00Z\", \"rule_name\": \"Unauthorized Admin Login\", \"description\": \"Admin panel login from unknown IP outside business hours\", \"severity\": \"high\", \"src_ip\": \"203.0.113.42\", \"dst_ip\": \"10.0.0.50\", \"dst_port\": 8080, \"protocol\": \"TCP\", \"alert_id\": \"SIEM-008\"}"
+  },
+  {
+    "event_id": "544a467e496c3c99",
+    "timestamp": "2024-01-15T15:10:00Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Data Exfiltration Detected - Large volume of data transferred to external IP",
+    "raw": "{\"timestamp\": \"2024-01-15T15:10:00Z\", \"rule_name\": \"Data Exfiltration Detected\", \"description\": \"Large volume of data transferred to external IP\", \"severity\": \"critical\", \"src_ip\": \"10.0.0.60\", \"dst_ip\": \"198.51.100.10\", \"dst_port\": 21, \"protocol\": \"FTP\", \"alert_id\": \"SIEM-009\"}"
+  },
+  {
+    "event_id": "bef9021febbf8826",
+    "timestamp": "2024-01-15T15:20:00Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] RDP Brute Force - Multiple failed RDP authentication attempts",
+    "raw": "{\"timestamp\": \"2024-01-15T15:20:00Z\", \"rule_name\": \"RDP Brute Force\", \"description\": \"Multiple failed RDP authentication attempts\", \"severity\": \"high\", \"src_ip\": \"192.168.2.15\", \"dst_ip\": \"10.0.0.20\", \"dst_port\": 3389, \"protocol\": \"TCP\", \"alert_id\": \"SIEM-011\"}"
+  },
+  {
+    "event_id": "12463827826ae473",
+    "timestamp": "2024-01-15T15:25:00Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Reverse Shell Detected - Reverse shell connection attempt detected via netcat",
+    "raw": "{\"timestamp\": \"2024-01-15T15:25:00Z\", \"rule_name\": \"Reverse Shell Detected\", \"description\": \"Reverse shell connection attempt detected via netcat\", \"severity\": \"critical\", \"src_ip\": \"10.0.0.55\", \"dst_ip\": \"185.220.101.99\", \"dst_port\": 4444, \"protocol\": \"TCP\", \"alert_id\": \"SIEM-012\"}"
+  },
+  {
+    "event_id": "66350eef35b313eb",
+    "timestamp": "2024-01-15T15:35:00Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Log Tampering Detected - System log files modified or deleted by unauthorized process",
+    "raw": "{\"timestamp\": \"2024-01-15T15:35:00Z\", \"rule_name\": \"Log Tampering Detected\", \"description\": \"System log files modified or deleted by unauthorized process\", \"severity\": \"high\", \"src_ip\": \"10.0.0.30\", \"dst_ip\": \"10.0.0.30\", \"dst_port\": 0, \"protocol\": \"LOCAL\", \"alert_id\": \"SIEM-014\"}"
+  },
+  {
+    "event_id": "877c0c612c3a18b2",
+    "timestamp": "2024-01-15T15:40:00Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] SMB Lateral Movement - SMB traffic indicating lateral movement between internal hosts",
+    "raw": "{\"timestamp\": \"2024-01-15T15:40:00Z\", \"rule_name\": \"SMB Lateral Movement\", \"description\": \"SMB traffic indicating lateral movement between internal hosts\", \"severity\": \"high\", \"src_ip\": \"10.0.0.45\", \"dst_ip\": \"10.0.0.60\", \"dst_port\": 445, \"protocol\": \"TCP\", \"alert_id\": \"SIEM-015\"}"
+  },
+  {
+    "event_id": "ddd9feea9f6177e7",
+    "timestamp": "2026-06-20T16:01:22Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Web Exploitation - SQL Injection - Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5",
+    "raw": "{\"timestamp\": \"2026-06-20T16:01:22Z\", \"rule_name\": \"Web Exploitation - SQL Injection\", \"description\": \"Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5\", \"severity\": \"high\"}"
+  },
+  {
+    "event_id": "1329b010af637f57",
+    "timestamp": "2026-06-20T16:03:40Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Brute Force Attack - SSH - More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100",
+    "raw": "{\"timestamp\": \"2026-06-20T16:03:40Z\", \"rule_name\": \"Brute Force Attack - SSH\", \"description\": \"More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100\", \"severity\": \"high\"}"
+  },
+  {
+    "event_id": "7bcfbf0bb22d674e",
+    "timestamp": "2026-06-20T16:05:10Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Malware - Ransomware Activity - CRITICAL: Mass file rename and deletion activity detected on FileServer-01",
+    "raw": "{\"timestamp\": \"2026-06-20T16:05:10Z\", \"rule_name\": \"Malware - Ransomware Activity\", \"description\": \"CRITICAL: Mass file rename and deletion activity detected on FileServer-01\", \"severity\": \"critical\"}"
+  },
+  {
+    "event_id": "e34386f050aa72b7",
+    "timestamp": "2026-06-20T16:07:15Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Privilege Escalation - Unauthorized - User 'guest' successfully executed sudo command without permissions on production database",
+    "raw": "{\"timestamp\": \"2026-06-20T16:07:15Z\", \"rule_name\": \"Privilege Escalation - Unauthorized\", \"description\": \"User 'guest' successfully executed sudo command without permissions on production database\", \"severity\": \"critical\"}"
+  },
+  {
+    "event_id": "ddd9feea9f6177e7",
+    "timestamp": "2026-06-20T16:01:22Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Web Exploitation - SQL Injection - Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5",
+    "raw": "{\"timestamp\": \"2026-06-20T16:01:22Z\", \"rule_name\": \"Web Exploitation - SQL Injection\", \"description\": \"Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5\", \"severity\": \"high\"}"
+  },
+  {
+    "event_id": "1329b010af637f57",
+    "timestamp": "2026-06-20T16:03:40Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Brute Force Attack - SSH - More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100",
+    "raw": "{\"timestamp\": \"2026-06-20T16:03:40Z\", \"rule_name\": \"Brute Force Attack - SSH\", \"description\": \"More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100\", \"severity\": \"high\"}"
+  },
+  {
+    "event_id": "7bcfbf0bb22d674e",
+    "timestamp": "2026-06-20T16:05:10Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Malware - Ransomware Activity - CRITICAL: Mass file rename and deletion activity detected on FileServer-01",
+    "raw": "{\"timestamp\": \"2026-06-20T16:05:10Z\", \"rule_name\": \"Malware - Ransomware Activity\", \"description\": \"CRITICAL: Mass file rename and deletion activity detected on FileServer-01\", \"severity\": \"critical\"}"
+  },
+  {
+    "event_id": "e34386f050aa72b7",
+    "timestamp": "2026-06-20T16:07:15Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Privilege Escalation - Unauthorized - User 'guest' successfully executed sudo command without permissions on production database",
+    "raw": "{\"timestamp\": \"2026-06-20T16:07:15Z\", \"rule_name\": \"Privilege Escalation - Unauthorized\", \"description\": \"User 'guest' successfully executed sudo command without permissions on production database\", \"severity\": \"critical\"}"
+  },
+  {
+    "event_id": "ddd9feea9f6177e7",
+    "timestamp": "2026-06-20T16:01:22Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Web Exploitation - SQL Injection - Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5",
+    "raw": "{\"timestamp\": \"2026-06-20T16:01:22Z\", \"rule_name\": \"Web Exploitation - SQL Injection\", \"description\": \"Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5\", \"severity\": \"high\"}"
+  },
+  {
+    "event_id": "1329b010af637f57",
+    "timestamp": "2026-06-20T16:03:40Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Brute Force Attack - SSH - More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100",
+    "raw": "{\"timestamp\": \"2026-06-20T16:03:40Z\", \"rule_name\": \"Brute Force Attack - SSH\", \"description\": \"More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100\", \"severity\": \"high\"}"
+  },
+  {
+    "event_id": "7bcfbf0bb22d674e",
+    "timestamp": "2026-06-20T16:05:10Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Malware - Ransomware Activity - CRITICAL: Mass file rename and deletion activity detected on FileServer-01",
+    "raw": "{\"timestamp\": \"2026-06-20T16:05:10Z\", \"rule_name\": \"Malware - Ransomware Activity\", \"description\": \"CRITICAL: Mass file rename and deletion activity detected on FileServer-01\", \"severity\": \"critical\"}"
+  },
+  {
+    "event_id": "e34386f050aa72b7",
+    "timestamp": "2026-06-20T16:07:15Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Privilege Escalation - Unauthorized - User 'guest' successfully executed sudo command without permissions on production database",
+    "raw": "{\"timestamp\": \"2026-06-20T16:07:15Z\", \"rule_name\": \"Privilege Escalation - Unauthorized\", \"description\": \"User 'guest' successfully executed sudo command without permissions on production database\", \"severity\": \"critical\"}"
+  },
+  {
+    "event_id": "e45206184881e75d",
+    "timestamp": "2026-06-21T16:58:26.660907+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[sshd[4321]@arch-secure] Failed password for invalid user admin from 192.168.1.100",
+    "raw": "{\"raw\": \"<34>Jun 17 2026 15:25:00 arch-secure sshd[4321]: Failed password for invalid user admin from 192.168.1.100\", \"timestamp\": \"Jun 17 2026 15:25:00\", \"host\": \"arch-secure\", \"process\": \"sshd[4321]\", \"priority\": 34, \"message\": \"Failed password for invalid user admin from 192.168.1.100\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "7b12980e1c915213",
+    "timestamp": "2026-06-21T16:58:27.102889+00:00",
+    "source": "syslog",
+    "severity": 0.1,
+    "message": "[kernel@arch-secure] CRITICAL: intrusion detected on eth0",
+    "raw": "{\"raw\": \"<1>Jun 17 2026 15:26:00 arch-secure kernel: CRITICAL: intrusion detected on eth0\", \"timestamp\": \"Jun 17 2026 15:26:00\", \"host\": \"arch-secure\", \"process\": \"kernel\", \"priority\": 1, \"message\": \"CRITICAL: intrusion detected on eth0\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "8290556559e68754",
+    "timestamp": "2026-06-21T16:58:27.641812+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[nginx[999]@arch-secure] error 403 Forbidden from 10.0.0.5",
+    "raw": "{\"raw\": \"<14>Jun 17 2026 15:27:00 arch-secure nginx[999]: error 403 Forbidden from 10.0.0.5\", \"timestamp\": \"Jun 17 2026 15:27:00\", \"host\": \"arch-secure\", \"process\": \"nginx[999]\", \"priority\": 14, \"message\": \"error 403 Forbidden from 10.0.0.5\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "ec3fcbca399505bb",
+    "timestamp": "2026-06-21T16:58:28.123558+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[cron[111]@arch-secure] info: normal scheduled task ran ok",
+    "raw": "{\"raw\": \"<86>Jun 17 2026 15:28:00 arch-secure cron[111]: info: normal scheduled task ran ok\", \"timestamp\": \"Jun 17 2026 15:28:00\", \"host\": \"arch-secure\", \"process\": \"cron[111]\", \"priority\": 86, \"message\": \"info: normal scheduled task ran ok\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "25b7c847e763c91f",
+    "timestamp": "2026-06-21T16:58:28.659745+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[sshd[4322]@arch-secure] Failed password for invalid user root from 192.168.1.200",
+    "raw": "{\"raw\": \"<34>Jun 17 2026 15:29:00 arch-secure sshd[4322]: Failed password for invalid user root from 192.168.1.200\", \"timestamp\": \"Jun 17 2026 15:29:00\", \"host\": \"arch-secure\", \"process\": \"sshd[4322]\", \"priority\": 34, \"message\": \"Failed password for invalid user root from 192.168.1.200\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "ad2b0f69bd191980",
+    "timestamp": "2026-06-21T16:58:29.166270+00:00",
+    "source": "syslog",
+    "severity": 0.1,
+    "message": "[firewall@arch-secure] brute force attack detected from 172.16.0.99",
+    "raw": "{\"raw\": \"<1>Jun 17 2026 15:30:00 arch-secure firewall: brute force attack detected from 172.16.0.99\", \"timestamp\": \"Jun 17 2026 15:30:00\", \"host\": \"arch-secure\", \"process\": \"firewall\", \"priority\": 1, \"message\": \"brute force attack detected from 172.16.0.99\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "e41ed8ac471326e7",
+    "timestamp": "2026-06-21T16:59:48.041404+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[sshd[4321]@arch-secure] Failed password for invalid user admin from 192.168.1.100",
+    "raw": "{\"raw\": \"<34>Jun 17 2026 15:25:00 arch-secure sshd[4321]: Failed password for invalid user admin from 192.168.1.100\", \"timestamp\": \"Jun 17 2026 15:25:00\", \"host\": \"arch-secure\", \"process\": \"sshd[4321]\", \"priority\": 34, \"message\": \"Failed password for invalid user admin from 192.168.1.100\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "6cf36ce13665067d",
+    "timestamp": "2026-06-21T16:59:48.548043+00:00",
+    "source": "syslog",
+    "severity": 0.1,
+    "message": "[kernel@arch-secure] CRITICAL: intrusion detected on eth0",
+    "raw": "{\"raw\": \"<1>Jun 17 2026 15:26:00 arch-secure kernel: CRITICAL: intrusion detected on eth0\", \"timestamp\": \"Jun 17 2026 15:26:00\", \"host\": \"arch-secure\", \"process\": \"kernel\", \"priority\": 1, \"message\": \"CRITICAL: intrusion detected on eth0\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "e128f88176d6e850",
+    "timestamp": "2026-06-21T16:59:49.069242+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[nginx[999]@arch-secure] error 403 Forbidden from 10.0.0.5",
+    "raw": "{\"raw\": \"<14>Jun 17 2026 15:27:00 arch-secure nginx[999]: error 403 Forbidden from 10.0.0.5\", \"timestamp\": \"Jun 17 2026 15:27:00\", \"host\": \"arch-secure\", \"process\": \"nginx[999]\", \"priority\": 14, \"message\": \"error 403 Forbidden from 10.0.0.5\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "d3c0700f7e5fea97",
+    "timestamp": "2026-06-21T16:59:49.546734+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[cron[111]@arch-secure] info: normal scheduled task ran ok",
+    "raw": "{\"raw\": \"<86>Jun 17 2026 15:28:00 arch-secure cron[111]: info: normal scheduled task ran ok\", \"timestamp\": \"Jun 17 2026 15:28:00\", \"host\": \"arch-secure\", \"process\": \"cron[111]\", \"priority\": 86, \"message\": \"info: normal scheduled task ran ok\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "1104ef9c121af64c",
+    "timestamp": "2026-06-21T16:59:50.105584+00:00",
+    "source": "syslog",
+    "severity": 1.0,
+    "message": "[sshd[4322]@arch-secure] Failed password for invalid user root from 192.168.1.200",
+    "raw": "{\"raw\": \"<34>Jun 17 2026 15:29:00 arch-secure sshd[4322]: Failed password for invalid user root from 192.168.1.200\", \"timestamp\": \"Jun 17 2026 15:29:00\", \"host\": \"arch-secure\", \"process\": \"sshd[4322]\", \"priority\": 34, \"message\": \"Failed password for invalid user root from 192.168.1.200\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "d5b69796cc039df6",
+    "timestamp": "2026-06-21T16:59:50.607309+00:00",
+    "source": "syslog",
+    "severity": 0.1,
+    "message": "[firewall@arch-secure] brute force attack detected from 172.16.0.99",
+    "raw": "{\"raw\": \"<1>Jun 17 2026 15:30:00 arch-secure firewall: brute force attack detected from 172.16.0.99\", \"timestamp\": \"Jun 17 2026 15:30:00\", \"host\": \"arch-secure\", \"process\": \"firewall\", \"priority\": 1, \"message\": \"brute force attack detected from 172.16.0.99\", \"parse_error\": null}"
+  },
+  {
+    "event_id": "ddd9feea9f6177e7",
+    "timestamp": "2026-06-20T16:01:22Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Web Exploitation - SQL Injection - Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5",
+    "raw": "{\"timestamp\": \"2026-06-20T16:01:22Z\", \"rule_name\": \"Web Exploitation - SQL Injection\", \"description\": \"Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5\", \"severity\": \"high\"}"
+  },
+  {
+    "event_id": "1329b010af637f57",
+    "timestamp": "2026-06-20T16:03:40Z",
+    "source": "siem",
+    "severity": 0.7,
+    "message": "[SIEM ALERT] Brute Force Attack - SSH - More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100",
+    "raw": "{\"timestamp\": \"2026-06-20T16:03:40Z\", \"rule_name\": \"Brute Force Attack - SSH\", \"description\": \"More than 15 failed authentication attempts detected for user root from source IP 192.168.1.100\", \"severity\": \"high\"}"
+  },
+  {
+    "event_id": "7bcfbf0bb22d674e",
+    "timestamp": "2026-06-20T16:05:10Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Malware - Ransomware Activity - CRITICAL: Mass file rename and deletion activity detected on FileServer-01",
+    "raw": "{\"timestamp\": \"2026-06-20T16:05:10Z\", \"rule_name\": \"Malware - Ransomware Activity\", \"description\": \"CRITICAL: Mass file rename and deletion activity detected on FileServer-01\", \"severity\": \"critical\"}"
+  },
+  {
+    "event_id": "e34386f050aa72b7",
+    "timestamp": "2026-06-20T16:07:15Z",
+    "source": "siem",
+    "severity": 0.9,
+    "message": "[SIEM ALERT] Privilege Escalation - Unauthorized - User 'guest' successfully executed sudo command without permissions on production database",
+    "raw": "{\"timestamp\": \"2026-06-20T16:07:15Z\", \"rule_name\": \"Privilege Escalation - Unauthorized\", \"description\": \"User 'guest' successfully executed sudo command without permissions on production database\", \"severity\": \"critical\"}"
   }
 ]

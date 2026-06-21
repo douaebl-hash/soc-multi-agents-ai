@@ -279,5 +279,34 @@
     },
     "correlation_alert": null,
     "original_message": "[SIEM ALERT] Malware - Ransomware Activity - CRITICAL: Mass file rename and deletion activity detected on FileServer-01"
+  },
+  {
+    "event_id": "ddd9feea9f6177e7",
+    "timestamp": "2026-06-20T16:01:22Z",
+    "analyzed_at": "2026-06-21T17:02:19.299589+00:00",
+    "source": "siem",
+    "event_type": "EXPLOIT_ATTEMPT",
+    "final_severity": 0.76,
+    "severity_label": "MEDIUM",
+    "entities": {
+      "ips": [
+        "185.220.101.5"
+      ],
+      "ports": [],
+      "users": [],
+      "is_failed_auth": false
+    },
+    "llm_analysis": {
+      "attack_summary": "SQL Injection attempt detected from IP 185.220.101.5",
+      "attack_technique": "T1070 - 20096 (Web Application: SQL Injection)",
+      "affected_assets": [
+        "185.220.101.5"
+      ],
+      "recommended_action": "Investigate the source IP, block it if malicious activity is confirmed, and review web application security measures",
+      "confidence": 0.9,
+      "needs_escalation": true
+    },
+    "correlation_alert": null,
+    "original_message": "[SIEM ALERT] Web Exploitation - SQL Injection - Web Application Firewall detected SQL injection payload in HTTP POST request from IP 185.220.101.5"
   }
 ]

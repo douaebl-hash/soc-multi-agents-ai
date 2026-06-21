@@ -44,6 +44,19 @@ os.makedirs(RAW_DIR, exist_ok=True)
 os.makedirs(PROCESSED_DIR, exist_ok=True)
 
 # ============================================================================
+# UTILS & VALIDATION CHECKS
+# ============================================================================
+
+def is_tshark_available() -> bool:
+    """Vérifie de manière sécurisée si tshark est disponible sur le système."""
+    try:
+        # Exécute une commande légère pour tester l'exécutable
+        subprocess.run(["tshark", "-v"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=2)
+        return True
+    except (FileNotFoundError, subprocess.SubprocessError):
+        return False
+
+# ============================================================================
 # EVENT STRUCTURE
 # ============================================================================
 
@@ -152,6 +165,12 @@ class NetworkCaptureAgent:
 
     def _tshark_reader(self) -> None:
         """Source 1 : Capture Réseau en direct via Tshark."""
+        # --- AJOUT DE LA SÉCURITÉ DE VÉRIFICATION ---
+        if not is_tshark_available():
+            print("[🟡 NETWORK CAPTURE INDISPONIBLE] Tshark ou le pilote Npcap/Wireshark est introuvable sur cette machine.")
+            self.status.errors.append("tshark executable or packet capture driver missing")
+            return
+
         iface = self.network_interface or detect_active_interface()
         if not iface:
             self.status.errors.append("No active network interface found")
@@ -222,30 +241,44 @@ class NetworkCaptureAgent:
         print("[🔴 SYSLOG] Receiver thread stopped")
 
     def _siem_reader(self) -> None:
-        """Source 3 : Ingestion des alertes de sécurité (SIEM)."""
-        siem_file_path = os.path.join(RAW_DIR, "siem_alerts.json")
-        print(f"[🔍 SIEM] Watching file source: {siem_file_path}")
+        """Source 3 : Ingestion en flux (Streaming) des alertes de sécurité (SIEM).
+        Ouvre le fichier une seule fois et lit uniquement les nouvelles lignes."""
+        siem_file_path = os.path.join(RAW_DIR, "siem_alerts.jsonl")
+        print(f"[🔍 SIEM WATCH] Initializing stream reader for: {siem_file_path}")
         
-        while self.running and not self.shutdown_event.is_set():
-            if os.path.exists(siem_file_path):
-                try:
-                    with open(siem_file_path, "r", encoding="utf-8") as f:
-                        for line in f:
-                            if not self.running or self.shutdown_event.is_set():
-                                break
-                            line = line.strip()
-                            if not line:
-                                continue
-                            try:
-                                alert_data = json.loads(line)
-                                self._global_queue.put(("SIEM", alert_data))
-                            except json.JSONDecodeError:
-                                continue
-                    # Pour simuler une scrutation ou éviter de relire en boucle infinie le même fichier statique :
-                    time.sleep(10)
-                except Exception as e:
-                    self.status.errors.append(f"SIEM file read error: {e}")
-            time.sleep(2.0)
+        # Attente passive si le fichier n'existe pas encore au démarrage de la chaîne
+        while self.running and not self.shutdown_event.is_set() and not os.path.exists(siem_file_path):
+            time.sleep(1.0)
+            
+        if not self.running or self.shutdown_event.is_set():
+            return
+
+        print("[🟢 SIEM STREAM] JSON Source file locked. Starting single-open stream process...")
+        
+        try:
+            with open(siem_file_path, "r", encoding="utf-8") as f:
+                while self.running and not self.shutdown_event.is_set():
+                    line = f.readline()
+                    
+                    # S'il n'y a pas de nouvelle ligne écrite, on dort 1 seconde (évite l'attente active CPU)
+                    if not line:
+                        time.sleep(1.0)
+                        continue
+                        
+                    line = line.strip()
+                    if not line:
+                        continue
+                        
+                    # Traitement de l'alerte SIEM reçue en temps réel (Ligne JSON unique)
+                    try:
+                        alert_data = json.loads(line)
+                        self._global_queue.put(("SIEM", alert_data))
+                    except json.JSONDecodeError:
+                        continue
+                        
+        except Exception as e:
+            self.status.errors.append(f"SIEM stream reader crash: {e}")
+            
         print("[🔴 SIEM] Reader thread stopped")
 
     def _process_global_queue(self) -> None:
@@ -353,7 +386,10 @@ class NetworkCaptureAgent:
 
         time.sleep(0.5)
         print("\n[✅ SOC AGENT] Central Multi-Source Engine fully operational.")
-        print("Listening to: 🟢 Networks Capture (tshark) | 🟢 Syslog Streams (UDP) | 🟢 SIEM Feeds (JSON)")
+        
+        # --- MODIFICATION DYNAMIQUE DE L'AFFICHAGE DE STATUT ---
+        net_status = "🟢 Networks Capture (tshark)" if is_tshark_available() else "❌ Networks Capture (tshark MISSING/DRIVER ERROR)"
+        print(f"Listening to: {net_status} | 🟢 Syslog Streams (UDP) | 🟢 SIEM Feeds (JSON)")
 
         try:
             while self.running and not self.shutdown_event.is_set():
