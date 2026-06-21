@@ -177,7 +177,7 @@ class NetworkCaptureAgent:
             return
 
         self.status.current_interface = iface
-        cmd = ["tshark", "-i", any, "-T", "ek", "-l"]
+        cmd = ["tshark", "-i", str(iface), "-T", "ek", "-l"]
         if self.network_filter:
             cmd.extend(["-f", self.network_filter])
 
