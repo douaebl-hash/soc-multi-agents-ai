@@ -19,7 +19,7 @@ Système multi-agents basé sur LangChain et Mistral pour l'automatisation des t
 
 ```bash
 git clone https://github.com/votre-org/soc-multi-agents-ai.git
-cd soc-multi-agents
+cd soc-multi-agents-ai
 ```
 
 ### 2. Installer les dépendances Python
@@ -41,7 +41,7 @@ streamlit>=1.35.0
 
 ```bash
 # Installation Ollama (Linux)
-curl -fsSL https://ollama.com/install.sh | sh
+irm https://ollama.com/install.ps1 | iex
 
 # Télécharger le modèle Mistral
 ollama pull mistral
@@ -60,27 +60,26 @@ Ouvrir **4 terminaux** distincts (un par agent) depuis la racine du projet.
 ### Terminal 1 — Agent Extracteur
 
 ```bash
-python agents/extracteur/extracteur_agent.py
+python agents/extracteur/extracteur_agent.py --daemon
 ```
 
 ### Terminal 2 — Agent Analyseur
 
 ```bash
-python agents/analyseur/analyseur_agent.py --model mistral --poll-interval 2.0
+python agents/analyseur/analyseur_agent.py --model mistral 
 ```
 
 ### Terminal 3 — Agent Rapporteur
 
 ```bash
-python agents/rapporteur/rapporteur_agent.py --mode poll --poll-interval 5.0
+python agents/rapporteur/rapporteur_agent.py --mode poll 
 ```
 
 
 ### Terminal 4 — Agent Exécuteur
 
 ```bash
-python agents/executeur/executeur_agent.py --model mistral --severity CRITICAL HIGH
-```
+python agents/executeur/executeur_agent.py --model mistral 
 
 
 ---
