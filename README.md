@@ -121,7 +121,6 @@ soc-multi-agents/
 ├── data/
 │   ├── processed/                # Canaux SharedMemory (JSON)
 │   ├── reports/                  # Rapports d'incidents générés
-│   ├── logs/                     # Logs d'audit
 │   ├── raw/                      # Logs bruts sources
 │   └── shared/
 │       ├── memory.json           # Métadonnées inter-agents
